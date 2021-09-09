@@ -1,0 +1,29 @@
+server:
+  port: 8080
+logging:
+  level:
+    root: info
+spring:
+  profiles:
+    active: dev
+  datasource:
+    url: jdbc:h2:file:./testdb
+    driver-class-name: org.h2.Driver
+    hikari:
+      poolName: Hikari
+      auto-commit: false
+  jpa:
+    database: h2
+    show-sql: true
+    open-in-view: false
+  liquibase:
+    contexts: ${spring.profiles.active}
+    change-log: classpath:config/liquibase/master.xml
+  jackson:
+    default-property-inclusion: non_null
+#    hibernate:
+#      ddl-auto: update
+#    properties:
+#      hibernate.generate_statistics: true
+#      hibernate.jdbc.batch_size: 1000
+#      hibernate.order_inserts: true
