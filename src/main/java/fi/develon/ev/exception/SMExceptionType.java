@@ -9,7 +9,8 @@ import org.springframework.http.HttpStatus;
  */
 @Getter
 public enum SMExceptionType {
-    GENERAL(1000, HttpStatus.INTERNAL_SERVER_ERROR, "fi.develon.ev.error.general");
+    GENERAL(1000, HttpStatus.INTERNAL_SERVER_ERROR, "fi.develon.ev.error.general"),
+    VALIDATION(1001, HttpStatus.BAD_REQUEST, "fi.develon.ev.error.validation");
 
     private final int code;
     private final HttpStatus httpStatus;
