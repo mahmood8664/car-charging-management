@@ -3,6 +3,7 @@ package fi.develon.ev.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -25,10 +26,10 @@ public class Station {
     private String name;
 
     @Column(name = "latitude")
-    private int latitude;
+    private BigDecimal latitude;
 
     @Column(name = "longitude")
-    private int longitude;
+    private BigDecimal longitude;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
