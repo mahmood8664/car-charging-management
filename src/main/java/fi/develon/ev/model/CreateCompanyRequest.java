@@ -9,23 +9,20 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 /**
- * Represent a company
+ * Create company request
  *
  * @author mahmood
  * @since 9/10/21
  */
-@Value
 @Builder
-public class CompanyDto {
-    @ApiModelProperty(value = "Company id", example = "222")
-    @Positive
+@Value
+public class CreateCompanyRequest {
+    @ApiModelProperty(value = "Company name", example = "DFG-454")
     @NotNull
-    Long companyId;
-    @ApiModelProperty(value = "Company name", example = "DSF-343")
-    @Length(min = 3, max = 100)
-    @NotNull
+    @Length(min = 3)
     String companyName;
-    @ApiModelProperty(value = "Parent company id", example = "454")
+
+    @ApiModelProperty(value = "Parent company id", example = "433")
     @Positive
     Long parentCompanyId;
 }

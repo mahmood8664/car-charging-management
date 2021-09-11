@@ -12,37 +12,32 @@ import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 
 /**
- * represent a station model
- *
+ * Create new station request
  * @author mahmood
  * @since 9/10/21
  */
-@Value
 @Builder
-public class StationDto {
-    @ApiModelProperty(value = "Station id", example = "123")
-    @Positive
-    @NotNull
-    Long stationId;
+@Value
+public class CreateStationRequest {
 
-    @ApiModelProperty(value = "Station name", example = "JST-123")
+    @ApiModelProperty(value = "Station name", example = "DFR-124")
     @Length(min = 3, max = 100)
     @NotNull
     String stationName;
 
-    @ApiModelProperty(value = "Latitude of station location, between 90 and -90", example = "25.32652655")
+    @ApiModelProperty(value = "latitude of station's location, between 90 and -90", example = "25.32652655")
     @DecimalMin(value = "-90")
     @DecimalMax(value = "90")
     @NotNull
     BigDecimal latitude;
 
-    @ApiModelProperty(value = "Longitude of station location, between 180 and -180", example = "135.32652655")
+    @ApiModelProperty(value = "latitude of station's location, between 90 and -90", example = "60.32652655")
     @DecimalMin(value = "-180")
     @DecimalMax(value = "180")
     @NotNull
     BigDecimal longitude;
 
-    @ApiModelProperty(value = "Company id", example = "345")
+    @ApiModelProperty(value = "company id", example = "25")
     @Positive
     @NotNull
     Long companyId;

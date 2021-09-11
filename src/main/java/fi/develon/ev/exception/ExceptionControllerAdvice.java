@@ -5,7 +5,7 @@ import fi.develon.ev.model.ErrorDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
@@ -25,12 +25,12 @@ import java.util.Locale;
 @Slf4j
 public class ExceptionControllerAdvice {
 
-    private final ResourceBundleMessageSource messageSource;
+    private final MessageSource messageSource;
 
     @ExceptionHandler(SMException.class)
     @ResponseBody
-    public ResponseEntity<BaseResponse<ErrorDto>> handleWalletException(SMException e) {
-        log.debug("wallet exception occurred: ", e);
+    public ResponseEntity<BaseResponse<ErrorDto>> handleSMException(SMException e) {
+        log.debug("exception occurred: ", e);
         String message = messageSource.getMessage(e.getErrorType().getMessageKey(), null, Locale.getDefault());
         return ResponseEntity.status(e.getErrorType().getHttpStatus()).body(BaseResponse.error(ErrorDto.builder()
                 .data(e.getData())
