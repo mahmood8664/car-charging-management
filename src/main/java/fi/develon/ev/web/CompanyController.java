@@ -1,7 +1,10 @@
 package fi.develon.ev.web;
 
+import fi.develon.ev.entity.Company;
 import fi.develon.ev.model.*;
-import fi.develon.ev.service.CompanyService;
+import fi.develon.ev.repository.CompanyAggregate;
+import fi.develon.ev.repository.CompanyRepository;
+import fi.develon.ev.repository.StationRepository;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -9,9 +12,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 /**
  * Company controller including all APIs related to company resource
+ *
  * @author mahmood
  * @since 9/10/21
  */
@@ -20,7 +25,9 @@ import javax.validation.Valid;
 @RequestMapping("/api/v1/company")
 public class CompanyController {
 
-    private final CompanyService companyService;
+    private final CompanyRepository companyRepository;
+    private final StationRepository stationRepository;
+    private final CompanyAggregate companyAggregate;
 
     @ApiOperation(value = "Returns all companies, this services is paginated")
     @ApiResponses(value = {
@@ -29,7 +36,8 @@ public class CompanyController {
             @ApiResponse(code = 500, message = "Internal server error.")
     })
     @GetMapping("")
-    public BaseResponse<PagingResponse<CompanyDto>> allCompanies(@RequestParam PaginationRequest request) {
+    public BaseResponse<PagingResponse<CompanyDto>> allCompanies(PaginationRequest request) {
+
         return null;
     }
 

@@ -1,30 +1,33 @@
 package fi.develon.ev.entity;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * @author mahmood
  * @since 9/10/21
  */
 @Data
-@Builder
+@SuperBuilder
+@AllArgsConstructor
+@NoArgsConstructor
 @Document("company")
 public class Company {
     @Id
     private String id;
     private String name;
-    private Company parent;
-    private List<Company> childCompanies;
-    private List<Station> stations;
+    @Indexed
+    private String parentCompanyId;
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate
