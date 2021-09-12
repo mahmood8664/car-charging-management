@@ -3,6 +3,7 @@ package fi.develon.ev.model;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -17,7 +18,7 @@ import javax.validation.constraints.Positive;
 public class CompanyStationsInquiryRequest extends PaginationRequest {
 
     @ApiModelProperty(value = "Company id", example = "45")
-    @Positive
+    @Length(min = 1,max = 100)
     @NotNull
-    Long companyId;
+    String companyId;
 }

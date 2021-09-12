@@ -18,14 +18,15 @@ import javax.validation.constraints.Positive;
 @Builder
 public class CompanyDto {
     @ApiModelProperty(value = "Company id", example = "222")
-    @Positive
+    @Length(min = 1,max = 100)
     @NotNull
-    Long companyId;
+    String companyId;
     @ApiModelProperty(value = "Company name", example = "DSF-343")
     @Length(min = 3, max = 100)
     @NotNull
     String companyName;
     @ApiModelProperty(value = "Parent company id", example = "454")
-    @Positive
-    Long parentCompanyId;
+    @Length(min = 1,max = 100)
+    @NotNull
+    String parentCompanyId;
 }

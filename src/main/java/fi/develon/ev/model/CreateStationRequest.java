@@ -38,7 +38,7 @@ public class CreateStationRequest {
     BigDecimal longitude;
 
     @ApiModelProperty(value = "company id", example = "25")
-    @Positive
+    @Length(min = 1, max = 100)
     @NotNull
-    Long companyId;
+    String companyId;
 }

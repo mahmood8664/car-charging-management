@@ -45,5 +45,5 @@ public class StationDto {
     @ApiModelProperty(value = "Company id", example = "345")
     @Positive
     @NotNull
-    Long companyId;
+    String companyId;
 }
