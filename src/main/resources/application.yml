@@ -6,24 +6,14 @@ logging:
 spring:
   profiles:
     active: dev
-  datasource:
-    url: jdbc:h2:file:./testdb
-    driver-class-name: org.h2.Driver
-    hikari:
-      poolName: Hikari
-      auto-commit: false
-  jpa:
-    database: h2
-    show-sql: true
-    open-in-view: false
-  liquibase:
-    contexts: ${spring.profiles.active}
-    change-log: classpath:config/liquibase/master.xml
   jackson:
     default-property-inclusion: non_null
-#    hibernate:
-#      ddl-auto: update
-#    properties:
-#      hibernate.generate_statistics: true
-#      hibernate.jdbc.batch_size: 1000
-#      hibernate.order_inserts: true
+  data:
+    mongodb:
+      username: ${MONGO_USERNAME:mongo}
+      password: ${MONGO_PASSWORD:mongo}
+      host: ${MONGO_HOST:localhost}
+      port: ${MONGO_PORT:27017}
+      database: "station_management"
+      authentication-database: "admin"
+      auto-index-creation: true

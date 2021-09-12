@@ -1,8 +1,13 @@
 package fi.develon.ev.entity;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -10,47 +15,22 @@ import java.util.List;
  * @author mahmood
  * @since 9/10/21
  */
-@Getter
-@Setter
+@Data
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@Entity
-@Table(name = "company")
+@Document("company")
 public class Company {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "name")
+    private String id;
     private String name;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
     private Company parent;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "company")
+    private List<Company> childCompanies;
     private List<Station> stations;
-
-    @Column(name = "created_at")
+    @CreatedDate
     private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
+    @LastModifiedDate
     private LocalDateTime updatedAt;
-
     @Version
-    @Column(name = "version", columnDefinition = "bigint default 0", nullable = false)
-    private long version = 0;
-
-    @PrePersist
-    void prePersist() {
-        this.createdAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    void preUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
+    private long version;
 
 
     @Override

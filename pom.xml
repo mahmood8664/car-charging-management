@@ -19,10 +19,21 @@
         <maven.compiler.target>11</maven.compiler.target>
         <lombok-runtime.version>1.18.20</lombok-runtime.version>
         <springfox-version>3.0.0</springfox-version>
-        <liquibase.version>4.4.3</liquibase.version>
-        <javassist.version>3.28.0-GA</javassist.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
+        <testcontainers.version>1.16.0</testcontainers.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>testcontainers-bom</artifactId>
+                <version>${testcontainers.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -31,19 +42,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jdbc</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -86,14 +85,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.liquibase</groupId>
-            <artifactId>liquibase-core</artifactId>
-            <version>${liquibase.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.liquibase.ext</groupId>
-            <artifactId>liquibase-hibernate5</artifactId>
-            <version>${liquibase.version}</version>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>mongodb</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -122,62 +116,12 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.2</version>
                 <configuration>
-                    <!-- Force alphabetical order to have a reproducible build -->
                     <runOrder>alphabetical</runOrder>
                     <reportsDirectory>${junit.utReportFolder}</reportsDirectory>
                     <includes>
                         <include>**/**Test</include>
                     </includes>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.liquibase</groupId>
-                <artifactId>liquibase-maven-plugin</artifactId>
-                <version>${liquibase.version}</version>
-                <configuration>
-                    <changeLogFile>${project.basedir}/src/main/resources/config/liquibase/master.xml</changeLogFile>
-                    <diffChangeLogFile>
-                        ${project.basedir}/src/main/resources/config/liquibase/changelog/${maven.build.timestamp}_changelog.xml
-                    </diffChangeLogFile>
-                    <outputChangeLogFile>
-                        ${project.basedir}/src/main/resources/config/liquibase/changelog/${maven.build.timestamp}_changelog.xml
-                    </outputChangeLogFile>
-                    <driver>org.h2.Driver</driver>
-                    <url>jdbc:h2:file:./testdb</url>
-                    <defaultSchemaName>testdb</defaultSchemaName>
-                    <verbose>true</verbose>
-                    <logging>info</logging>
-                    <referenceUrl>
-                        hibernate:spring:fi.develon.ev.entity?dialect=org.hibernate.dialect.H2Dialect&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
-                    </referenceUrl>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.liquibase</groupId>
-                        <artifactId>liquibase-core</artifactId>
-                        <version>${liquibase.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.liquibase.ext</groupId>
-                        <artifactId>liquibase-hibernate5</artifactId>
-                        <version>${liquibase.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-starter-data-jpa</artifactId>
-                        <version>2.5.4</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.javassist</groupId>
-                        <artifactId>javassist</artifactId>
-                        <version>3.28.0-GA</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>javax.validation</groupId>
-                        <artifactId>validation-api</artifactId>
-                        <version>${validation-api.version}</version>
-                    </dependency>
-                </dependencies>
             </plugin>
         </plugins>
     </build>
