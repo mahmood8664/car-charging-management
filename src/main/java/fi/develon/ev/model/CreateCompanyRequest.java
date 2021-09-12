@@ -22,7 +22,7 @@ public class CreateCompanyRequest {
     @Length(min = 3)
     String companyName;
 
-    @ApiModelProperty(value = "Parent company id", example = "433")
+    @ApiModelProperty(value = "Parent company id", example = "433sdfc")
     @Length(min = 1, max = 100)
     String parentCompanyId;
 }

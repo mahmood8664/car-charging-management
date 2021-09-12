@@ -20,10 +20,10 @@ import java.math.BigDecimal;
 @Value
 @Builder
 public class StationDto {
-    @ApiModelProperty(value = "Station id", example = "123")
+    @ApiModelProperty(value = "Station id", example = "123sdf")
     @Positive
     @NotNull
-    Long stationId;
+    String stationId;
 
     @ApiModelProperty(value = "Station name", example = "JST-123")
     @Length(min = 3, max = 100)
@@ -42,7 +42,7 @@ public class StationDto {
     @NotNull
     BigDecimal longitude;
 
-    @ApiModelProperty(value = "Company id", example = "345")
+    @ApiModelProperty(value = "Company id", example = "433sdfc")
     @Positive
     @NotNull
     String companyId;

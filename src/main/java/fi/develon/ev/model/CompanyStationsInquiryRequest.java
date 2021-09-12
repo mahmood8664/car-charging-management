@@ -17,7 +17,7 @@ import javax.validation.constraints.Positive;
 @SuperBuilder
 public class CompanyStationsInquiryRequest extends PaginationRequest {
 
-    @ApiModelProperty(value = "Company id", example = "45")
+    @ApiModelProperty(value = "Company id", example = "433sdfc")
     @Length(min = 1,max = 100)
     @NotNull
     String companyId;

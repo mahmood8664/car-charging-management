@@ -17,7 +17,7 @@ import javax.validation.constraints.Positive;
 @Value
 @Builder
 public class CompanyDto {
-    @ApiModelProperty(value = "Company id", example = "222")
+    @ApiModelProperty(value = "Company id", example = "433sdfc")
     @Length(min = 1,max = 100)
     @NotNull
     String companyId;
@@ -25,7 +25,7 @@ public class CompanyDto {
     @Length(min = 3, max = 100)
     @NotNull
     String companyName;
-    @ApiModelProperty(value = "Parent company id", example = "454")
+    @ApiModelProperty(value = "Parent company id", example = "433sdfc")
     @Length(min = 1,max = 100)
     @NotNull
     String parentCompanyId;
