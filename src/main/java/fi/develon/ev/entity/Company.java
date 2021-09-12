@@ -33,7 +33,7 @@ public class Company {
     @LastModifiedDate
     private LocalDateTime updatedAt;
     @Version
-    private long version;
+    private Long version;
 
 
     @Override
