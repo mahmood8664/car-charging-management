@@ -1,31 +1,27 @@
 package fi.develon.ev.tdd;
 
+import fi.develon.ev.entity.Company;
 import fi.develon.ev.repository.CompanyRepository;
-import fi.develon.ev.repository.StationRepository;
-import org.junit.jupiter.api.BeforeEach;
+import fi.develon.ev.testcontainer.MongoDBIT;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @author mahmood
  * @since 9/11/21
  */
-@SpringBootTest
-public class StationControllerTest {
+public class StationControllerTest extends MongoDBIT {
 
-    @Autowired
-    private StationRepository stationRepository;
     @Autowired
     private CompanyRepository companyRepository;
 
-    @BeforeEach
-    @Transactional
-    void clearData(){
-        stationRepository.deleteAll();
-        companyRepository.deleteAll();
+    @Test
+    void testtt() {
+        List<Company> all = companyRepository.findAll();
+        System.out.println(all);
+
     }
-
-
 
 }
