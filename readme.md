@@ -75,3 +75,6 @@ http://localhost:8080/swagger-ui/
 ### Database
 You need mongodb to run this application. The information for connecting to database should 
 be provided in `application.yml` config file. 
+
+### Test Coverage
+![plot](./img/coverage.png)
