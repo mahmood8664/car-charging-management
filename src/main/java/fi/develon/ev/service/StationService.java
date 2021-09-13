@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
@@ -72,8 +73,7 @@ public class StationService {
 
         return stationRepository.save(Station.builder()
                 .name(request.getStationName())
-                .longitude(request.getLongitude())
-                .latitude(request.getLatitude())
+                .location(new GeoJsonPoint(request.getLongitude().doubleValue(), request.getLatitude().doubleValue()))
                 .companyId(request.getCompanyId())
                 .build()).getId();
 
@@ -89,8 +89,7 @@ public class StationService {
         Station station = stationRepository.findOne(Example.of(Station.builder().id(request.getStationId()).build()))
                 .orElseThrow(() -> new SMException(SMExceptionType.NOT_FOUND));
 
-        station.setLatitude(request.getLatitude());
-        station.setLongitude(request.getLongitude());
+        station.setLocation(new GeoJsonPoint(request.getLongitude().doubleValue(), request.getLatitude().doubleValue()));
         station.setName(request.getStationName());
 
         if (!station.getCompanyId().equals(request.getCompanyId())) {

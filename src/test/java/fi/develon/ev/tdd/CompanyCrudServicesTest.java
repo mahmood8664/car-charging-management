@@ -2,6 +2,7 @@ package fi.develon.ev.tdd;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import fi.develon.ev.entity.Company;
+import fi.develon.ev.entity.Station;
 import fi.develon.ev.model.BaseResponse;
 import fi.develon.ev.model.CompanyDto;
 import fi.develon.ev.model.CreateCompanyRequest;
@@ -10,6 +11,7 @@ import fi.develon.ev.testcontainer.MongoDBIT;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Example;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -175,6 +177,7 @@ public class CompanyCrudServicesTest extends MongoDBIT {
     @Test
     void deleteCompanyTest_OK() throws Exception {
         addThreeCompanies();
+        addStations();
 
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/companies/2222")
         ).andExpect(MockMvcResultMatchers.status().isOk());
@@ -193,6 +196,8 @@ public class CompanyCrudServicesTest extends MongoDBIT {
         cmp2.ifPresentOrElse(company -> Assertions.assertThat(company.getParentCompanyId()).isEqualTo("1111"),
                 () -> Assertions.fail("cannot find company with id 1111"));
 
+        stationRepository.findAll(Example.of(Station.builder().companyId("2222").build())).stream().findAny().ifPresent(station ->
+                Assertions.fail("Station of company must be deleted after deletion of company"));
     }
 
     @Test
@@ -233,6 +238,33 @@ public class CompanyCrudServicesTest extends MongoDBIT {
                         .id("3333")
                         .name("333")
                         .parentCompanyId("2222")
+                        .build()));
+    }
+
+    private void addStations(){
+        stationRepository.saveAll(List.of(Station.builder()
+                        .id("11111")
+                        .companyId("1111")
+                        .location(new GeoJsonPoint(11, 11))
+                        .name("S11")
+                        .build(),
+                Station.builder()
+                        .id("22222")
+                        .companyId("1111")
+                        .location(new GeoJsonPoint(12, 12))
+                        .name("S12")
+                        .build(),
+                Station.builder()
+                        .id("33333")
+                        .companyId("2222")
+                        .location(new GeoJsonPoint(21, 21))
+                        .name("S21")
+                        .build(),
+                Station.builder()
+                        .id("44444")
+                        .companyId("2222")
+                        .location(new GeoJsonPoint(22, 22))
+                        .name("S22")
                         .build()));
     }
 }

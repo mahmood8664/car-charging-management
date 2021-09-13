@@ -3,11 +3,15 @@ package fi.develon.ev.tdd;
 import com.fasterxml.jackson.core.type.TypeReference;
 import fi.develon.ev.entity.Company;
 import fi.develon.ev.entity.Station;
-import fi.develon.ev.model.*;
+import fi.develon.ev.model.BaseResponse;
+import fi.develon.ev.model.CreateStationRequest;
+import fi.develon.ev.model.PagingResponse;
+import fi.develon.ev.model.StationDto;
 import fi.develon.ev.testcontainer.MongoDBIT;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Example;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -34,32 +38,32 @@ public class StationCrudTest extends MongoDBIT {
                 resultActions.andReturn().getResponse().getContentAsString(), new TypeReference<>() {
                 });
 
-
         Assertions.assertThat(allStationsResponse.isSuccessful()).isTrue();
         Assertions.assertThat(allStationsResponse.getResponse().getResponseList()).isNotNull();
         Assertions.assertThat(allStationsResponse.getResponse().getResponseList().size()).isEqualTo(4);
         Assertions.assertThat(allStationsResponse.getResponse().isHasNext()).isFalse();
 
-        if (allStationsResponse.getResponse().getResponseList().get(0).getStationName().equals("S11")) {
-            Assertions.assertThat(allStationsResponse.getResponse().getResponseList().get(0).getLatitude()).isEqualTo("11");
-            Assertions.assertThat(allStationsResponse.getResponse().getResponseList().get(0).getLongitude()).isEqualTo("11");
-        }
+        allStationsResponse.getResponse().getResponseList().forEach(stationDto -> {
+            if (stationDto.getStationName().equals("S11")) {
+                Assertions.assertThat(stationDto.getLatitude().compareTo(BigDecimal.valueOf(11))).isEqualTo(0);
+                Assertions.assertThat(stationDto.getLongitude().compareTo(BigDecimal.valueOf(11))).isEqualTo(0);
+            }
 
-        if (allStationsResponse.getResponse().getResponseList().get(0).getStationName().equals("S12")) {
-            Assertions.assertThat(allStationsResponse.getResponse().getResponseList().get(0).getLatitude()).isEqualTo("12");
-            Assertions.assertThat(allStationsResponse.getResponse().getResponseList().get(0).getLongitude()).isEqualTo("12");
-        }
+            if (stationDto.getStationName().equals("S12")) {
+                Assertions.assertThat(stationDto.getLatitude().compareTo(BigDecimal.valueOf(12))).isEqualTo(0);
+                Assertions.assertThat(stationDto.getLongitude().compareTo(BigDecimal.valueOf(12))).isEqualTo(0);
+            }
 
-        if (allStationsResponse.getResponse().getResponseList().get(0).getStationName().equals("S21")) {
-            Assertions.assertThat(allStationsResponse.getResponse().getResponseList().get(0).getLatitude()).isEqualTo("21");
-            Assertions.assertThat(allStationsResponse.getResponse().getResponseList().get(0).getLongitude()).isEqualTo("21");
-        }
+            if (stationDto.getStationName().equals("S21")) {
+                Assertions.assertThat(stationDto.getLatitude().compareTo(BigDecimal.valueOf(21))).isEqualTo(0);
+                Assertions.assertThat(stationDto.getLongitude().compareTo(BigDecimal.valueOf(21))).isEqualTo(0);
+            }
 
-        if (allStationsResponse.getResponse().getResponseList().get(0).getStationName().equals("S22")) {
-            Assertions.assertThat(allStationsResponse.getResponse().getResponseList().get(0).getLatitude()).isEqualTo("22");
-            Assertions.assertThat(allStationsResponse.getResponse().getResponseList().get(0).getLongitude()).isEqualTo("22");
-        }
-
+            if (stationDto.getStationName().equals("S22")) {
+                Assertions.assertThat(stationDto.getLatitude().compareTo(BigDecimal.valueOf(22))).isEqualTo(0);
+                Assertions.assertThat(stationDto.getLongitude().compareTo(BigDecimal.valueOf(22))).isEqualTo(0);
+            }
+        });
     }
 
     @Test
@@ -73,22 +77,22 @@ public class StationCrudTest extends MongoDBIT {
                 resultActions.andReturn().getResponse().getContentAsString(), new TypeReference<>() {
                 });
 
-
         Assertions.assertThat(allStationsResponse.isSuccessful()).isTrue();
         Assertions.assertThat(allStationsResponse.getResponse().getResponseList()).isNotNull();
         Assertions.assertThat(allStationsResponse.getResponse().getResponseList().size()).isEqualTo(2);
         Assertions.assertThat(allStationsResponse.getResponse().isHasNext()).isFalse();
 
-        if (allStationsResponse.getResponse().getResponseList().get(0).getStationName().equals("S11")) {
-            Assertions.assertThat(allStationsResponse.getResponse().getResponseList().get(0).getLatitude()).isEqualTo("11");
-            Assertions.assertThat(allStationsResponse.getResponse().getResponseList().get(0).getLongitude()).isEqualTo("11");
-        }
+        allStationsResponse.getResponse().getResponseList().forEach(stationDto -> {
+            if (stationDto.getStationName().equals("S11")) {
+                Assertions.assertThat(stationDto.getLatitude().compareTo(BigDecimal.valueOf(11))).isEqualTo(0);
+                Assertions.assertThat(stationDto.getLatitude().compareTo(BigDecimal.valueOf(11))).isEqualTo(0);
+            }
 
-        if (allStationsResponse.getResponse().getResponseList().get(0).getStationName().equals("S12")) {
-            Assertions.assertThat(allStationsResponse.getResponse().getResponseList().get(0).getLatitude()).isEqualTo("12");
-            Assertions.assertThat(allStationsResponse.getResponse().getResponseList().get(0).getLongitude()).isEqualTo("12");
-        }
-
+            if (stationDto.getStationName().equals("S12")) {
+                Assertions.assertThat(stationDto.getLatitude().compareTo(BigDecimal.valueOf(12))).isEqualTo(0);
+                Assertions.assertThat(stationDto.getLatitude().compareTo(BigDecimal.valueOf(12))).isEqualTo(0);
+            }
+        });
     }
 
     @Test
@@ -107,7 +111,6 @@ public class StationCrudTest extends MongoDBIT {
         Assertions.assertThat(allStationsResponse.getResponse().getResponseList()).isNotNull();
         Assertions.assertThat(allStationsResponse.getResponse().getResponseList().size()).isEqualTo(0);
         Assertions.assertThat(allStationsResponse.getResponse().isHasNext()).isFalse();
-
     }
 
     @Test
@@ -126,9 +129,8 @@ public class StationCrudTest extends MongoDBIT {
         Assertions.assertThat(getCompanyResponse.getResponse().getCompanyId()).isEqualTo("1111");
         Assertions.assertThat(getCompanyResponse.getResponse().getStationId()).isEqualTo("11111");
         Assertions.assertThat(getCompanyResponse.getResponse().getStationName()).isEqualTo("S11");
-        Assertions.assertThat(getCompanyResponse.getResponse().getLatitude()).isEqualTo("11");
-        Assertions.assertThat(getCompanyResponse.getResponse().getLongitude()).isEqualTo("11");
-
+        Assertions.assertThat(getCompanyResponse.getResponse().getLatitude().compareTo(BigDecimal.valueOf(11))).isEqualTo(0);
+        Assertions.assertThat(getCompanyResponse.getResponse().getLongitude().compareTo(BigDecimal.valueOf(11))).isEqualTo(0);
     }
 
     @Test
@@ -166,8 +168,8 @@ public class StationCrudTest extends MongoDBIT {
         stationOptional.ifPresentOrElse(st -> {
             Assertions.assertThat(st.getCompanyId()).isEqualTo(request.getCompanyId());
             Assertions.assertThat(st.getName()).isEqualTo(request.getStationName());
-            Assertions.assertThat(st.getLatitude()).isEqualTo(request.getLatitude());
-            Assertions.assertThat(st.getLongitude()).isEqualTo(request.getLongitude());
+            Assertions.assertThat(st.getLocation().getY()).isEqualTo(request.getLatitude().doubleValue());
+            Assertions.assertThat(st.getLocation().getX()).isEqualTo(request.getLongitude().doubleValue());
         }, () -> Assertions.fail("station is not created!"));
 
     }
@@ -226,8 +228,8 @@ public class StationCrudTest extends MongoDBIT {
         stationOptional.ifPresentOrElse(station -> {
             Assertions.assertThat(station.getCompanyId()).isEqualTo(request.getCompanyId());
             Assertions.assertThat(station.getName()).isEqualTo(request.getStationName());
-            Assertions.assertThat(station.getLatitude()).isEqualTo(request.getLatitude());
-            Assertions.assertThat(station.getLongitude()).isEqualTo(request.getLongitude());
+            Assertions.assertThat(station.getLocation().getY()).isEqualTo(request.getLatitude().doubleValue());
+            Assertions.assertThat(station.getLocation().getX()).isEqualTo(request.getLongitude().doubleValue());
         }, () -> Assertions.fail("station update is failed!"));
 
     }
@@ -323,29 +325,25 @@ public class StationCrudTest extends MongoDBIT {
         stationRepository.saveAll(List.of(Station.builder()
                         .id("11111")
                         .companyId(company1.getId())
-                        .latitude(BigDecimal.valueOf(11))
-                        .longitude(BigDecimal.valueOf(11))
+                        .location(new GeoJsonPoint(11, 11))
                         .name("S11")
                         .build(),
                 Station.builder()
                         .id("22222")
                         .companyId(company1.getId())
-                        .latitude(BigDecimal.valueOf(12))
-                        .longitude(BigDecimal.valueOf(12))
+                        .location(new GeoJsonPoint(12, 12))
                         .name("S12")
                         .build(),
                 Station.builder()
                         .id("33333")
                         .companyId(company2.getId())
-                        .latitude(BigDecimal.valueOf(21))
-                        .longitude(BigDecimal.valueOf(21))
+                        .location(new GeoJsonPoint(21, 21))
                         .name("S21")
                         .build(),
                 Station.builder()
                         .id("44444")
                         .companyId(company2.getId())
-                        .latitude(BigDecimal.valueOf(22))
-                        .longitude(BigDecimal.valueOf(22))
+                        .location(new GeoJsonPoint(22, 22))
                         .name("S22")
                         .build()));
     }

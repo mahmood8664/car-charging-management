@@ -1,10 +1,12 @@
 package fi.develon.ev.service;
 
 import fi.develon.ev.entity.Company;
+import fi.develon.ev.entity.Station;
 import fi.develon.ev.exception.SMException;
 import fi.develon.ev.exception.SMExceptionType;
 import fi.develon.ev.model.*;
 import fi.develon.ev.repository.CompanyRepository;
+import fi.develon.ev.repository.StationRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +31,7 @@ import java.util.stream.Collectors;
 public class CompanyService {
 
     private final CompanyRepository companyRepository;
+    private final StationRepository stationRepository;
 
     /**
      * Returns all companies, pagination is mandatory
@@ -110,12 +113,14 @@ public class CompanyService {
 
         List<Company> children = companyRepository.findAll(Example.of(Company.builder().parentCompanyId(company.getId()).build()));
         Company parent = companyRepository.findOne(Example.of(Company.builder().id(company.getParentCompanyId()).build())).orElse(null);
-        children.forEach(cmp -> {
-            cmp.setParentCompanyId(parent == null ? null : parent.getId());
-        });
+        children.forEach(cmp -> cmp.setParentCompanyId(parent == null ? null : parent.getId()));
 
         companyRepository.saveAll(children);
         companyRepository.delete(company);
+
+        List<Station> stations = stationRepository.findAll(Example.of(Station.builder().companyId(companyId).build()));
+        stationRepository.deleteAll(stations);
+
     }
 
 }

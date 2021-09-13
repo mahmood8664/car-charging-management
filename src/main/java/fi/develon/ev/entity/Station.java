@@ -6,6 +6,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
+import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -23,8 +25,6 @@ public class Station {
     @Id
     private String id;
     private String name;
-    private BigDecimal latitude;
-    private BigDecimal longitude;
     @Indexed
     private String companyId;
     @CreatedDate
@@ -33,14 +33,15 @@ public class Station {
     private LocalDateTime updatedAt;
     @Version
     private Long version;
+    @GeoSpatialIndexed(name="Location")
+    GeoJsonPoint location;
 
     @Override
     public String toString() {
         return "Station{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", latitude=" + latitude +
-                ", longitude=" + longitude +
+                ", location=" + location +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", version=" + version +

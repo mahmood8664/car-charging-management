@@ -3,6 +3,8 @@ package fi.develon.ev.model;
 import fi.develon.ev.entity.Company;
 import fi.develon.ev.entity.Station;
 
+import java.math.BigDecimal;
+
 /**
  * @author mahmood
  * @since 9/13/21
@@ -25,8 +27,8 @@ public class DtoMapper {
                 .stationId(station.getId())
                 .stationName(station.getName())
                 .companyId(station.getCompanyId())
-                .latitude(station.getLatitude())
-                .longitude(station.getLongitude())
+                .latitude(BigDecimal.valueOf(station.getLocation().getY()))
+                .longitude(BigDecimal.valueOf(station.getLocation().getX()))
                 .build();
     }
 }

@@ -9,11 +9,11 @@ import fi.develon.ev.model.StationDto;
 import fi.develon.ev.testcontainer.MongoDBIT;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -65,29 +65,25 @@ public class StationNearbyTest extends MongoDBIT {
         stationRepository.saveAll(List.of(Station.builder()
                         .id("11111")
                         .companyId(company1.getId())
-                        .latitude(BigDecimal.valueOf(11))
-                        .longitude(BigDecimal.valueOf(11))
+                        .location(new GeoJsonPoint(11, 11))
                         .name("S11")
                         .build(),
                 Station.builder()
                         .id("22222")
                         .companyId(company1.getId())
-                        .latitude(BigDecimal.valueOf(12))
-                        .longitude(BigDecimal.valueOf(12))
+                        .location(new GeoJsonPoint(12, 12))
                         .name("S12")
                         .build(),
                 Station.builder()
                         .id("33333")
                         .companyId(company2.getId())
-                        .latitude(BigDecimal.valueOf(21))
-                        .longitude(BigDecimal.valueOf(21))
+                        .location(new GeoJsonPoint(21, 21))
                         .name("S21")
                         .build(),
                 Station.builder()
                         .id("44444")
                         .companyId(company2.getId())
-                        .latitude(BigDecimal.valueOf(22))
-                        .longitude(BigDecimal.valueOf(22))
+                        .location(new GeoJsonPoint(22, 22))
                         .name("S22")
                         .build()));
     }
