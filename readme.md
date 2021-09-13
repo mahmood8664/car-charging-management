@@ -77,4 +77,4 @@ You need mongodb to run this application. The information for connecting to data
 be provided in `application.yml` config file. 
 
 ### Test Coverage
-![plot](./img/coverage.png)
+![coverage report](./img/coverage.png)
