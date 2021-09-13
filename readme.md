@@ -66,20 +66,12 @@ mvn package
 ```
 Then go to the target directory and run the following command:
 ```shell
-java -jar everon-assignment-1.0-SNAPSHOT.jar
+java -jar station-management-1.0-SNAPSHOT.jar
 ```
+### Calling APIs
 The application default port is 8080, and after running successfully, you can find the swagger address at
 http://localhost:8080/swagger-ui/
 
-## Algorithms and Complexities
-### Start and Stop Session
-We use the Map data structure to store and retrieve session data. So, for starting or stopping a new session, our complexity
-is O(1).
-### Retrieve all Sessions
-We need to process all sessions to retrieve all session data, so the complexity is O(n).
-### Summary Service
-To implement the Summary service, we store all incoming events (staring and stopping sessions) in an `ArrayList`. So, when we want to calculate a summary, it is enough to process events a minute before. The complexity could be different
-base on the distribution of incoming sessions on time, but it only processes events belong to a minute before.
-## Concurrency
-To solve the concurrency problem, we used `ConcurrentHashMap` to store session data and also lock based on
-`Semaphore` that acquires the lock by station id. This technique prevents concurrent access to the same station id.  
+### Database
+You need mongodb to run this application. The information for connecting to database should 
+be provided in `application.yml` config file. 
