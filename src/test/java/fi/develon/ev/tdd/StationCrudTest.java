@@ -25,7 +25,7 @@ import java.util.Optional;
  * @author mahmood
  * @since 9/11/21
  */
-public class StationCrudTest extends MongoDBIT {
+class StationCrudTest extends MongoDBIT {
 
     @Test
     void getAllStationsTest_OK() throws Exception {
@@ -45,23 +45,23 @@ public class StationCrudTest extends MongoDBIT {
 
         allStationsResponse.getResponse().getResponseList().forEach(stationDto -> {
             if (stationDto.getStationName().equals("S11")) {
-                Assertions.assertThat(stationDto.getLatitude().compareTo(BigDecimal.valueOf(11))).isEqualTo(0);
-                Assertions.assertThat(stationDto.getLongitude().compareTo(BigDecimal.valueOf(11))).isEqualTo(0);
+                Assertions.assertThat(stationDto.getLatitude().compareTo(BigDecimal.valueOf(11))).isZero();
+                Assertions.assertThat(stationDto.getLongitude().compareTo(BigDecimal.valueOf(11))).isZero();
             }
 
             if (stationDto.getStationName().equals("S12")) {
-                Assertions.assertThat(stationDto.getLatitude().compareTo(BigDecimal.valueOf(12))).isEqualTo(0);
-                Assertions.assertThat(stationDto.getLongitude().compareTo(BigDecimal.valueOf(12))).isEqualTo(0);
+                Assertions.assertThat(stationDto.getLatitude().compareTo(BigDecimal.valueOf(12))).isZero();
+                Assertions.assertThat(stationDto.getLongitude().compareTo(BigDecimal.valueOf(12))).isZero();
             }
 
             if (stationDto.getStationName().equals("S21")) {
-                Assertions.assertThat(stationDto.getLatitude().compareTo(BigDecimal.valueOf(21))).isEqualTo(0);
-                Assertions.assertThat(stationDto.getLongitude().compareTo(BigDecimal.valueOf(21))).isEqualTo(0);
+                Assertions.assertThat(stationDto.getLatitude().compareTo(BigDecimal.valueOf(21))).isZero();
+                Assertions.assertThat(stationDto.getLongitude().compareTo(BigDecimal.valueOf(21))).isZero();
             }
 
             if (stationDto.getStationName().equals("S22")) {
-                Assertions.assertThat(stationDto.getLatitude().compareTo(BigDecimal.valueOf(22))).isEqualTo(0);
-                Assertions.assertThat(stationDto.getLongitude().compareTo(BigDecimal.valueOf(22))).isEqualTo(0);
+                Assertions.assertThat(stationDto.getLatitude().compareTo(BigDecimal.valueOf(22))).isZero();
+                Assertions.assertThat(stationDto.getLongitude().compareTo(BigDecimal.valueOf(22))).isZero();
             }
         });
     }
@@ -114,8 +114,8 @@ public class StationCrudTest extends MongoDBIT {
         Assertions.assertThat(getCompanyResponse.getResponse().getCompanyId()).isEqualTo("1111");
         Assertions.assertThat(getCompanyResponse.getResponse().getStationId()).isEqualTo("11111");
         Assertions.assertThat(getCompanyResponse.getResponse().getStationName()).isEqualTo("S11");
-        Assertions.assertThat(getCompanyResponse.getResponse().getLatitude().compareTo(BigDecimal.valueOf(11))).isEqualTo(0);
-        Assertions.assertThat(getCompanyResponse.getResponse().getLongitude().compareTo(BigDecimal.valueOf(11))).isEqualTo(0);
+        Assertions.assertThat(getCompanyResponse.getResponse().getLatitude().compareTo(BigDecimal.valueOf(11))).isZero();
+        Assertions.assertThat(getCompanyResponse.getResponse().getLongitude().compareTo(BigDecimal.valueOf(11))).isZero();
     }
 
     @Test

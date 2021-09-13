@@ -96,18 +96,17 @@ public class CompanyService {
                     .orElseThrow(() -> new SMException(SMExceptionType.NOT_FOUND));
         }
 
-        company.ifPresent(cmp -> {
-            cmp.setName(request.getCompanyName());
-            cmp.setParentCompanyId(request.getParentCompanyId());
+        Company cmp = company.orElseThrow(() -> new SMException(SMExceptionType.NOT_FOUND));
 
-            if (cmp.getParentCompanyId() != null && cmp.getParentCompanyId().equals(cmp.getId())) {
-                throw new SMException(SMExceptionType.BAD_REQUEST, "company can be it's parent!");
-            }
+        cmp.setName(request.getCompanyName());
+        cmp.setParentCompanyId(request.getParentCompanyId());
 
-            companyRepository.save(cmp);
-        });
+        if (cmp.getParentCompanyId() != null && cmp.getParentCompanyId().equals(cmp.getId())) {
+            throw new SMException(SMExceptionType.BAD_REQUEST, "company can be it's parent!");
+        }
 
-        company.orElseThrow(() -> new SMException(SMExceptionType.NOT_FOUND));
+        companyRepository.save(cmp);
+
     }
 
     /**
@@ -136,12 +135,12 @@ public class CompanyService {
      * Get company details with all children companies and their stations
      *
      * @param companyId        given company id
-     * @param include_children should include children company or not
+     * @param includeChildren should include children company or not
      * @return {@link CompanyDetailDto}
      */
-    public CompanyDetailDto getCompanyDetails(String companyId, boolean include_children) {
+    public CompanyDetailDto getCompanyDetails(String companyId, boolean includeChildren) {
 
-        if (include_children) {
+        if (includeChildren) {
             Optional<CompanyTree> companyFlatTree = companyDetialsRepository.getCompanyFlatTree(companyId, 100L);
             CompanyTree companyTree = companyFlatTree.orElseThrow(() -> new SMException(SMExceptionType.NOT_FOUND));
 

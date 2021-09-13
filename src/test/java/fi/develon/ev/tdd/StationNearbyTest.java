@@ -20,7 +20,7 @@ import java.util.List;
  * @author mahmood
  * @since 9/11/21
  */
-public class StationNearbyTest extends MongoDBIT {
+class StationNearbyTest extends MongoDBIT {
 
 
     @Test

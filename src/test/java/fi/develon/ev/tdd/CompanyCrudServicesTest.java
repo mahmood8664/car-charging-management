@@ -24,7 +24,7 @@ import java.util.Optional;
  * @author mahmood
  * @since 9/11/21
  */
-public class CompanyCrudServicesTest extends MongoDBIT {
+class CompanyCrudServicesTest extends MongoDBIT {
 
 
     @Test

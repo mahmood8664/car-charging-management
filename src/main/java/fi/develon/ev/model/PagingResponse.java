@@ -22,6 +22,6 @@ public class PagingResponse<T> {
     boolean hasNext;
 
     public static <E> PagingResponse<E> of(List<E> list, boolean hasNext) {
-        return new PagingResponse<E>(list, hasNext);
+        return new PagingResponse<>(list, hasNext);
     }
 }

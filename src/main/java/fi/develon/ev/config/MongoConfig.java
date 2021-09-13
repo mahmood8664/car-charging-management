@@ -12,11 +12,4 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableMongoRepositories(basePackages = "fi.develon.ev.repository")
 @EnableMongoAuditing
 public class MongoConfig {
-
-    //In mongo replica mode we can use mongo transactions
-//    @Bean
-//    MongoTransactionManager transactionManager(MongoDatabaseFactory dbFactory) {
-//        return new MongoTransactionManager(dbFactory);
-//    }
-
 }

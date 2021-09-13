@@ -57,8 +57,8 @@ public class CompanyController {
     })
     @GetMapping("/{company_id}/details")
     public BaseResponse<CompanyDetailDto> getCompanyDetails(@PathVariable("company_id") @Valid @Length(max = 100) String companyId,
-                                                            @RequestParam(name = "include_children", defaultValue = "true") boolean include_children) {
-        return BaseResponse.of(companyService.getCompanyDetails(companyId, include_children));
+                                                            @RequestParam(name = "includeChildren", defaultValue = "true") boolean includeChildren) {
+        return BaseResponse.of(companyService.getCompanyDetails(companyId, includeChildren));
     }
 
     @ApiOperation(value = "Create new company")

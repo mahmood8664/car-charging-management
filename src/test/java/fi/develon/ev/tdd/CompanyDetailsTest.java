@@ -19,7 +19,7 @@ import java.util.List;
  * @author mahmood
  * @since 9/11/21
  */
-public class CompanyDetailsTest extends MongoDBIT {
+class CompanyDetailsTest extends MongoDBIT {
 
     @Test
     void getCompanyDetailTest_OK() throws Exception {
@@ -37,7 +37,7 @@ public class CompanyDetailsTest extends MongoDBIT {
 
         Assertions.assertThat(companyDetailDto.getResponse().getCompany().getCompanyId()).isEqualTo("1111");
         Assertions.assertThat(companyDetailDto.getResponse().getCompany().getCompanyName()).isEqualTo("111");
-        Assertions.assertThat(companyDetailDto.getResponse().getCompany().getParentCompanyId()).isEqualTo(null);
+        Assertions.assertThat(companyDetailDto.getResponse().getCompany().getParentCompanyId()).isNull();
 
         Assertions.assertThat(companyDetailDto.getResponse().getStations().size()).isEqualTo(2);
         Assertions.assertThat(companyDetailDto.getResponse().getStations().get(0).getStationId()).isEqualTo("11111");
@@ -57,8 +57,8 @@ public class CompanyDetailsTest extends MongoDBIT {
         Assertions.assertThat(childCompanies.size()).isEqualTo(1);
         CompanyDetailDto companyDetailDto2 = childCompanies.get(0);
         Assertions.assertThat(companyDetailDto2.getCompany().getCompanyId()).isEqualTo("3333");
-        Assertions.assertThat(companyDetailDto2.getStations().size()).isEqualTo(0);
-        Assertions.assertThat(companyDetailDto2.getChildCompanies().size()).isEqualTo(0);
+        Assertions.assertThat(companyDetailDto2.getStations().size()).isZero();
+        Assertions.assertThat(companyDetailDto2.getChildCompanies().size()).isZero();
     }
 
     @Test
@@ -77,13 +77,13 @@ public class CompanyDetailsTest extends MongoDBIT {
 
         Assertions.assertThat(companyDetailDto.getResponse().getCompany().getCompanyId()).isEqualTo("1111");
         Assertions.assertThat(companyDetailDto.getResponse().getCompany().getCompanyName()).isEqualTo("111");
-        Assertions.assertThat(companyDetailDto.getResponse().getCompany().getParentCompanyId()).isEqualTo(null);
+        Assertions.assertThat(companyDetailDto.getResponse().getCompany().getParentCompanyId()).isNull();
 
         Assertions.assertThat(companyDetailDto.getResponse().getStations().size()).isEqualTo(2);
         Assertions.assertThat(companyDetailDto.getResponse().getStations().get(0).getStationId()).isEqualTo("11111");
         Assertions.assertThat(companyDetailDto.getResponse().getStations().get(1).getStationId()).isEqualTo("22222");
 
-        Assertions.assertThat(companyDetailDto.getResponse().getChildCompanies().size()).isEqualTo(0);
+        Assertions.assertThat(companyDetailDto.getResponse().getChildCompanies().size()).isZero();
 
     }
 
@@ -114,8 +114,8 @@ public class CompanyDetailsTest extends MongoDBIT {
         Assertions.assertThat(childCompanies.size()).isEqualTo(1);
         CompanyDetailDto companyDetailDto2 = childCompanies.get(0);
         Assertions.assertThat(companyDetailDto2.getCompany().getCompanyId()).isEqualTo("3333");
-        Assertions.assertThat(companyDetailDto2.getStations().size()).isEqualTo(0);
-        Assertions.assertThat(companyDetailDto2.getChildCompanies().size()).isEqualTo(0);
+        Assertions.assertThat(companyDetailDto2.getStations().size()).isZero();
+        Assertions.assertThat(companyDetailDto2.getChildCompanies().size()).isZero();
     }
 
     private void addThreeCompanies() {

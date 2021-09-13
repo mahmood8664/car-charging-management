@@ -59,7 +59,7 @@ public final class DtoMapper {
 
     private static List<CompanyDetailDto> calculateChild(List<CompanyTree> companyTrees, Map<String,
             List<CompanyTree>> companyMap, Map<String, List<StationDto>> stationDtoMap) {
-        if (companyTrees == null || companyTrees.size() == 0) {
+        if (companyTrees == null || companyTrees.isEmpty()) {
             return Collections.emptyList();
         }
 
