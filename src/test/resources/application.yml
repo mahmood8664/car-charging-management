@@ -1,0 +1,6 @@
+spring:
+  jackson:
+    default-property-inclusion: non_null
+  data:
+    mongodb:
+      auto-index-creation: true

@@ -29,8 +29,8 @@ public class StationNearbyTest extends MongoDBIT {
         addCompaniesAndStations();
 
         /*
-         * we have 4 stations with coordinates: (11,11),(12,12),(21,21),(22,22), our point: (10,10), distance = 200 KM
-         * We expect 2 stations: 11111,22222
+         * we have 4 stations with coordinates: (11,11),(12,12),(13,13),(22,22), our point: (10,10), distance = 300 KM
+         * We expect 2 stations: 11111,22222,3333
          */
 
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/stations/nearby?latitude=10&longitude=10&distance=1000"))
@@ -42,10 +42,15 @@ public class StationNearbyTest extends MongoDBIT {
 
         Assertions.assertThat(nearbyStations.isSuccessful()).isTrue();
         Assertions.assertThat(nearbyStations.getResponse().getResponseList()).isNotNull();
-        Assertions.assertThat(nearbyStations.getResponse().getResponseList().size()).isEqualTo(2);
+        Assertions.assertThat(nearbyStations.getResponse().getResponseList().size()).isEqualTo(3);
         Assertions.assertThat(nearbyStations.getResponse().isHasNext()).isFalse();
 
-        nearbyStations.getResponse().getResponseList().forEach(stationDto -> Assertions.assertThat(stationDto.getStationId()).isIn("11111", "22222"));
+        nearbyStations.getResponse().getResponseList().forEach(stationDto -> Assertions.assertThat(stationDto.getStationId()).isIn("11111", "22222", "33333"));
+
+        //check the order
+        Assertions.assertThat(nearbyStations.getResponse().getResponseList().get(0).getStationId()).isEqualTo("11111");
+        Assertions.assertThat(nearbyStations.getResponse().getResponseList().get(1).getStationId()).isEqualTo("22222");
+        Assertions.assertThat(nearbyStations.getResponse().getResponseList().get(2).getStationId()).isEqualTo("33333");
 
     }
 
@@ -77,7 +82,7 @@ public class StationNearbyTest extends MongoDBIT {
                 Station.builder()
                         .id("33333")
                         .companyId(company2.getId())
-                        .location(new GeoJsonPoint(21, 21))
+                        .location(new GeoJsonPoint(13, 13))
                         .name("S21")
                         .build(),
                 Station.builder()

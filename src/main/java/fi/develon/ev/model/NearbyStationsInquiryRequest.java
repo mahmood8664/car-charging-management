@@ -1,6 +1,7 @@
 package fi.develon.ev.model;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
@@ -21,6 +22,7 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = true)
 @Value
 @SuperBuilder
+@AllArgsConstructor
 public class NearbyStationsInquiryRequest extends PaginationRequest {
 
     @ApiModelProperty(value = "latitude of the given point, between 90 and -90", example = "25.32652655")

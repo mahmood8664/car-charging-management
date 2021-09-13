@@ -7,11 +7,11 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
+import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -33,8 +33,8 @@ public class Station {
     private LocalDateTime updatedAt;
     @Version
     private Long version;
-    @GeoSpatialIndexed(name="Location")
-    GeoJsonPoint location;
+    @GeoSpatialIndexed(name = "Location", type = GeoSpatialIndexType.GEO_2DSPHERE)
+    private GeoJsonPoint location;
 
     @Override
     public String toString() {

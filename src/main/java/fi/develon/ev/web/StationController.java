@@ -43,7 +43,7 @@ public class StationController {
     })
     @GetMapping("/nearby")
     public BaseResponse<PagingResponse<StationDto>> nearbyStations(NearbyStationsInquiryRequest request) {
-        return null;
+        return BaseResponse.of(stationService.nearStations(request));
     }
 
     @ApiOperation(value = "Returns station information of given station id")

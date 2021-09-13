@@ -21,7 +21,7 @@ import javax.validation.constraints.Min;
 @NoArgsConstructor
 @Data
 public class PaginationRequest {
-    @ApiModelProperty(value = "page number starts from 0", example = "2")
+    @ApiModelProperty(value = "page number starts from 0", example = "0")
     @Max(10000)
     @Min(0)
     private int pageNumber = 0;

@@ -11,6 +11,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.geo.Distance;
+import org.springframework.data.geo.Metrics;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.stereotype.Service;
 
@@ -111,5 +114,17 @@ public class StationService {
         Station station = stationRepository.findOne(Example.of(Station.builder().id(stationId).build()))
                 .orElseThrow(() -> new SMException(SMExceptionType.NOT_FOUND));
         stationRepository.delete(station);
+    }
+
+    public PagingResponse<StationDto> nearStations(NearbyStationsInquiryRequest request) {
+        Slice<Station> byLocationNear = stationRepository.findByLocationNear(
+                new GeoJsonPoint(request.getLongitude().doubleValue(), request.getLatitude().doubleValue()),
+                new Distance(request.getDistance(), Metrics.KILOMETERS),
+                PageRequest.of(request.getPageNumber(), request.getSize()));
+
+        return PagingResponse.of(
+                byLocationNear.getContent().stream().map(DtoMapper::getStationDto).collect(Collectors.toList()),
+                byLocationNear.hasNext()
+        );
     }
 }
