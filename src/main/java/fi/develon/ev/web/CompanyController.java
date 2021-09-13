@@ -18,7 +18,7 @@ import javax.validation.Valid;
  */
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/v1/company")
+@RequestMapping("/api/v1/companies")
 public class CompanyController {
 
     private final CompanyService companyService;

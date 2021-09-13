@@ -16,7 +16,7 @@ import javax.validation.Valid;
  */
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/v1/station")
+@RequestMapping("/api/v1/stations")
 public class StationController {
 
     @ApiOperation(value = "Returns all stations, this service is paginated")
@@ -61,7 +61,7 @@ public class StationController {
             @ApiResponse(code = 500, message = "Internal server error.")
     })
     @PostMapping("")
-    public BaseResponse<Long> createStation(@RequestBody @Valid CreateStationRequest request) {
+    public BaseResponse<String> createStation(@RequestBody @Valid CreateStationRequest request) {
         return null;
     }
 
