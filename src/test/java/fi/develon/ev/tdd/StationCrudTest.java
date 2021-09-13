@@ -27,7 +27,7 @@ public class StationCrudTest extends MongoDBIT {
     void getAllStationsTest_OK() throws Exception {
         addCompaniesAndStations();
 
-        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/station?pageNumber=0&size=4"))
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/stations?pageNumber=0&size=4"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
         BaseResponse<PagingResponse<StationDto>> allStationsResponse = json.readValue(
@@ -110,49 +110,6 @@ public class StationCrudTest extends MongoDBIT {
 
     }
 
-    private void addCompaniesAndStations() {
-        Company company1 = companyRepository.save(
-                Company.builder()
-                        .id("1111")
-                        .name("111")
-                        .build());
-
-        Company company2 = companyRepository.save(
-                Company.builder()
-                        .id("2222")
-                        .name("222")
-                        .build());
-
-        stationRepository.saveAll(List.of(Station.builder()
-                        .id("11111")
-                        .companyId(company1.getId())
-                        .latitude(BigDecimal.valueOf(11))
-                        .longitude(BigDecimal.valueOf(11))
-                        .name("S11")
-                        .build(),
-                Station.builder()
-                        .id("22222")
-                        .companyId(company1.getId())
-                        .latitude(BigDecimal.valueOf(12))
-                        .longitude(BigDecimal.valueOf(12))
-                        .name("S12")
-                        .build(),
-                Station.builder()
-                        .id("33333")
-                        .companyId(company2.getId())
-                        .latitude(BigDecimal.valueOf(21))
-                        .longitude(BigDecimal.valueOf(21))
-                        .name("S21")
-                        .build(),
-                Station.builder()
-                        .id("44444")
-                        .companyId(company2.getId())
-                        .latitude(BigDecimal.valueOf(22))
-                        .longitude(BigDecimal.valueOf(22))
-                        .name("S22")
-                        .build()));
-    }
-
     @Test
     void getStationTest_OK() throws Exception {
         addCompaniesAndStations();
@@ -232,12 +189,12 @@ public class StationCrudTest extends MongoDBIT {
                 .content(json.writeValueAsString(request))
         ).andExpect(MockMvcResultMatchers.status().isNotFound());
 
-        BaseResponse<ErrorDto> createResponse = json.readValue(
+        BaseResponse<Void> createResponse = json.readValue(
                 resultActions.andReturn().getResponse().getContentAsString(), new TypeReference<>() {
                 });
 
         Assertions.assertThat(createResponse.isSuccessful()).isFalse();
-        Assertions.assertThat(createResponse.getResponse().getErrorCode()).isEqualTo(1002);
+        Assertions.assertThat(createResponse.getErrorDto().getErrorCode()).isEqualTo(1002);
 
     }
 
@@ -349,4 +306,48 @@ public class StationCrudTest extends MongoDBIT {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/stations/sdf34")
         ).andExpect(MockMvcResultMatchers.status().isNotFound());
     }
+
+    private void addCompaniesAndStations() {
+        Company company1 = companyRepository.save(
+                Company.builder()
+                        .id("1111")
+                        .name("111")
+                        .build());
+
+        Company company2 = companyRepository.save(
+                Company.builder()
+                        .id("2222")
+                        .name("222")
+                        .build());
+
+        stationRepository.saveAll(List.of(Station.builder()
+                        .id("11111")
+                        .companyId(company1.getId())
+                        .latitude(BigDecimal.valueOf(11))
+                        .longitude(BigDecimal.valueOf(11))
+                        .name("S11")
+                        .build(),
+                Station.builder()
+                        .id("22222")
+                        .companyId(company1.getId())
+                        .latitude(BigDecimal.valueOf(12))
+                        .longitude(BigDecimal.valueOf(12))
+                        .name("S12")
+                        .build(),
+                Station.builder()
+                        .id("33333")
+                        .companyId(company2.getId())
+                        .latitude(BigDecimal.valueOf(21))
+                        .longitude(BigDecimal.valueOf(21))
+                        .name("S21")
+                        .build(),
+                Station.builder()
+                        .id("44444")
+                        .companyId(company2.getId())
+                        .latitude(BigDecimal.valueOf(22))
+                        .longitude(BigDecimal.valueOf(22))
+                        .name("S22")
+                        .build()));
+    }
+
 }

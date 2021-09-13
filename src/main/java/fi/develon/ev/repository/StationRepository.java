@@ -1,7 +1,10 @@
 package fi.develon.ev.repository;
 
 import fi.develon.ev.entity.Station;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -12,4 +15,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface StationRepository extends MongoRepository<Station, Long> {
+
 }

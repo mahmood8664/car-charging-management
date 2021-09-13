@@ -37,7 +37,8 @@ public class CompanyService {
      * @return {@link PagingResponse}
      */
     public PagingResponse<CompanyDto> allCompanies(PaginationRequest request) {
-        Slice<Company> allCompanies = companyRepository.findAllCompanies(PageRequest.of(request.getPageNumber(), request.getSize()));
+        Slice<Company> allCompanies = companyRepository.findAll(Example.of(Company.builder().build()),
+                PageRequest.of(request.getPageNumber(), request.getSize()));
         return PagingResponse.of(allCompanies.get().map(DtoMapper::getCompanyDto).collect(Collectors.toList()),
                 allCompanies.hasNext());
     }
@@ -88,12 +89,11 @@ public class CompanyService {
                     .orElseThrow(() -> new SMException(SMExceptionType.NOT_FOUND));
         }
 
-        company.ifPresent(cmp -> companyRepository.save(Company.builder()
-                .id(request.getCompanyId())
-                .name(request.getCompanyName())
-                .parentCompanyId(request.getParentCompanyId())
-                .version(0L)
-                .build()));
+        company.ifPresent(cmp -> {
+            cmp.setName(request.getCompanyName());
+            cmp.setParentCompanyId(request.getParentCompanyId());
+            companyRepository.save(cmp);
+        });
 
         company.orElseThrow(() -> new SMException(SMExceptionType.NOT_FOUND));
     }

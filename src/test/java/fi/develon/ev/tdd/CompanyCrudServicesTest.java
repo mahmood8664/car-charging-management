@@ -36,7 +36,6 @@ public class CompanyCrudServicesTest extends MongoDBIT {
                 resultActions.andReturn().getResponse().getContentAsString(), new TypeReference<>() {
                 });
 
-
         Assertions.assertThat(allCompanyResponse.isSuccessful()).isTrue();
         Assertions.assertThat(allCompanyResponse.getResponse().getResponseList()).isNotNull();
         Assertions.assertThat(allCompanyResponse.getResponse().getResponseList().size()).isEqualTo(2);
@@ -50,19 +49,6 @@ public class CompanyCrudServicesTest extends MongoDBIT {
             Assertions.assertThat(allCompanyResponse.getResponse().getResponseList().get(0).getCompanyName()).isEqualTo("222");
         }
 
-    }
-
-    private void addTwoCompanies() {
-        companyRepository.saveAll(List.of(
-                Company.builder()
-                        .id("1111")
-                        .name("111")
-                        .build(),
-                Company.builder()
-                        .id("2222")
-                        .name("222")
-                        .parentCompanyId("1111")
-                        .build()));
     }
 
     @Test
@@ -168,24 +154,6 @@ public class CompanyCrudServicesTest extends MongoDBIT {
 
     }
 
-    private void addThreeCompanies() {
-        companyRepository.saveAll(List.of(
-                Company.builder()
-                        .id("1111")
-                        .name("111")
-                        .build(),
-                Company.builder()
-                        .id("2222")
-                        .name("222")
-                        .parentCompanyId("1111")
-                        .build(),
-                Company.builder()
-                        .id("3333")
-                        .name("333")
-                        .parentCompanyId("2222")
-                        .build()));
-    }
-
     @Test
     void updateCompanyTest_NotFound() throws Exception {
         addThreeCompanies();
@@ -234,5 +202,37 @@ public class CompanyCrudServicesTest extends MongoDBIT {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/companies/3434")
         ).andExpect(MockMvcResultMatchers.status().isNotFound());
 
+    }
+
+    private void addTwoCompanies() {
+        companyRepository.saveAll(List.of(
+                Company.builder()
+                        .id("1111")
+                        .name("111")
+                        .build(),
+                Company.builder()
+                        .id("2222")
+                        .name("222")
+                        .parentCompanyId("1111")
+                        .build()));
+    }
+
+
+    private void addThreeCompanies() {
+        companyRepository.saveAll(List.of(
+                Company.builder()
+                        .id("1111")
+                        .name("111")
+                        .build(),
+                Company.builder()
+                        .id("2222")
+                        .name("222")
+                        .parentCompanyId("1111")
+                        .build(),
+                Company.builder()
+                        .id("3333")
+                        .name("333")
+                        .parentCompanyId("2222")
+                        .build()));
     }
 }

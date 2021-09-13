@@ -1,16 +1,19 @@
 package fi.develon.ev.web;
 
 import fi.develon.ev.model.*;
+import fi.develon.ev.service.StationService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.AllArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 /**
  * Station controller including all APIs related to station resource
+ *
  * @author mahmood
  * @since 9/10/21
  */
@@ -18,6 +21,8 @@ import javax.validation.Valid;
 @AllArgsConstructor
 @RequestMapping("/api/v1/stations")
 public class StationController {
+
+    private StationService stationService;
 
     @ApiOperation(value = "Returns all stations, this service is paginated")
     @ApiResponses(value = {
@@ -27,7 +32,7 @@ public class StationController {
     })
     @GetMapping("")
     public BaseResponse<PagingResponse<StationDto>> allStations(PaginationRequest request) {
-        return null;
+        return BaseResponse.of(stationService.findStations(request));
     }
 
     @ApiOperation(value = "Returns nearby station by given coordinates and distance(KM), ordered by distance")
@@ -49,8 +54,8 @@ public class StationController {
             @ApiResponse(code = 500, message = "Internal server error.")
     })
     @GetMapping("/{station_id}")
-    public BaseResponse<StationDto> getStation(@PathVariable("station_id") Long stationId) {
-        return null;
+    public BaseResponse<StationDto> getStation(@PathVariable("station_id") @Valid @Length(max = 100) String stationId) {
+        return BaseResponse.of(stationService.getStation(stationId));
     }
 
     @ApiOperation(value = "Creates new station")
@@ -62,7 +67,7 @@ public class StationController {
     })
     @PostMapping("")
     public BaseResponse<String> createStation(@RequestBody @Valid CreateStationRequest request) {
-        return null;
+        return BaseResponse.of(stationService.createStation(request));
     }
 
     @ApiOperation(value = "Updates new station")
@@ -74,7 +79,8 @@ public class StationController {
     })
     @PutMapping("")
     public BaseResponse<Void> updateStation(@RequestBody @Valid StationDto request) {
-        return null;
+        stationService.updateStation(request);
+        return BaseResponse.ok();
     }
 
     @ApiOperation(value = "Delete a station")
@@ -85,8 +91,9 @@ public class StationController {
             @ApiResponse(code = 500, message = "Internal server error.")
     })
     @DeleteMapping("/{station_id}")
-    public BaseResponse<Void> deleteStation(@PathVariable("station_id") Long stationId) {
-        return null;
+    public BaseResponse<Void> deleteStation(@PathVariable("station_id") @Valid @Length(max = 100) String stationId) {
+        stationService.deleteStation(stationId);
+        return BaseResponse.ok();
     }
 
 

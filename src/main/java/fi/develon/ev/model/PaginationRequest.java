@@ -5,12 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 /**
  * Pagination request
+ *
  * @author mahmood
  * @since 9/10/21
  */
@@ -28,4 +30,7 @@ public class PaginationRequest {
     @Max(10000)
     @Min(1)
     private int size = 20;
+
+    @Length(max = 100)
+    private String companyId;
 }

@@ -43,7 +43,7 @@ public class StationDto {
     BigDecimal longitude;
 
     @ApiModelProperty(value = "Company id", example = "433sdfc")
-    @Positive
     @NotNull
+    @Length(max = 100)
     String companyId;
 }

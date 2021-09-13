@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.AllArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -43,7 +44,7 @@ public class CompanyController {
             @ApiResponse(code = 500, message = "Internal server error.")
     })
     @GetMapping("/{company_id}")
-    public BaseResponse<CompanyDto> getCompany(@PathVariable("company_id") String companyId) {
+    public BaseResponse<CompanyDto> getCompany(@PathVariable("company_id") @Valid @Length(max = 100) String companyId) {
         return BaseResponse.of(companyService.getCompany(companyId));
     }
 
@@ -55,7 +56,7 @@ public class CompanyController {
             @ApiResponse(code = 500, message = "Internal server error.")
     })
     @GetMapping("/{company_id}/details")
-    public BaseResponse<CompanyDetailDto> getCompanyDetails(@PathVariable("company_id") Long companyId,
+    public BaseResponse<CompanyDetailDto> getCompanyDetails(@PathVariable("company_id") @Valid @Length(max = 100) String companyId,
                                                             @RequestParam(name = "include_child", defaultValue = "true") boolean include_child) {
         return null;
     }
@@ -93,7 +94,7 @@ public class CompanyController {
             @ApiResponse(code = 500, message = "Internal server error.")
     })
     @DeleteMapping("/{company_id}")
-    public BaseResponse<Void> deleteCompany(@PathVariable("company_id") String companyId) {
+    public BaseResponse<Void> deleteCompany(@PathVariable("company_id") @Valid @Length(max = 100) String companyId) {
         companyService.deleteCompany(companyId);
         return BaseResponse.ok();
     }

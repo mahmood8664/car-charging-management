@@ -32,7 +32,7 @@ public class Station {
     @LastModifiedDate
     private LocalDateTime updatedAt;
     @Version
-    private long version;
+    private Long version;
 
     @Override
     public String toString() {

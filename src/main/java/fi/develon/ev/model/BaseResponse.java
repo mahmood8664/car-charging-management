@@ -35,7 +35,7 @@ public class BaseResponse<T> {
     public static BaseResponse<ErrorDto> error(ErrorDto errorDto) {
         return BaseResponse.<ErrorDto>builder()
                 .response(null)
-                .successful(true)
+                .successful(false)
                 .errorDto(errorDto)
                 .build();
     }
