@@ -26,6 +26,5 @@ public class CompanyDto {
     String companyName;
     @ApiModelProperty(value = "Parent company id", example = "433sdfc")
     @Length(min = 1, max = 100)
-    @NotNull
     String parentCompanyId;
 }

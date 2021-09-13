@@ -1,10 +1,12 @@
 package fi.develon.ev.service;
 
 import fi.develon.ev.entity.Company;
+import fi.develon.ev.entity.CompanyTree;
 import fi.develon.ev.entity.Station;
 import fi.develon.ev.exception.SMException;
 import fi.develon.ev.exception.SMExceptionType;
 import fi.develon.ev.model.*;
+import fi.develon.ev.repository.CompanyDetialsRepository;
 import fi.develon.ev.repository.CompanyRepository;
 import fi.develon.ev.repository.StationRepository;
 import lombok.AllArgsConstructor;
@@ -15,8 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -32,6 +33,7 @@ public class CompanyService {
 
     private final CompanyRepository companyRepository;
     private final StationRepository stationRepository;
+    private final CompanyDetialsRepository companyDetialsRepository;
 
     /**
      * Returns all companies, pagination is mandatory
@@ -65,15 +67,17 @@ public class CompanyService {
      * @return created company id
      */
     public String createCompany(CreateCompanyRequest request) {
-        if (StringUtils.isNoneEmpty(request.getParentCompanyId())) {
-            companyRepository.findOne(Example.of(Company.builder()
+        String s = null;
+        if (StringUtils.isNotEmpty(request.getParentCompanyId())) {
+            s = companyRepository.findOne(Example.of(Company.builder()
                     .id(request.getParentCompanyId())
-                    .build())).orElseThrow(() -> new SMException(SMExceptionType.NOT_FOUND));
+                    .build())).orElseThrow(() -> new SMException(SMExceptionType.NOT_FOUND)).getId();
 
         }
         return companyRepository.save(Company.builder()
+                .id(UUID.randomUUID().toString())
                 .name(request.getCompanyName())
-                .parentCompanyId(request.getParentCompanyId())
+                .parentCompanyId(s)
                 .build()).getId();
     }
 
@@ -95,6 +99,11 @@ public class CompanyService {
         company.ifPresent(cmp -> {
             cmp.setName(request.getCompanyName());
             cmp.setParentCompanyId(request.getParentCompanyId());
+
+            if (cmp.getParentCompanyId() != null && cmp.getParentCompanyId().equals(cmp.getId())) {
+                throw new SMException(SMExceptionType.BAD_REQUEST, "company can be it's parent!");
+            }
+
             companyRepository.save(cmp);
         });
 
@@ -123,7 +132,35 @@ public class CompanyService {
 
     }
 
+    /**
+     * Get company details with all children companies and their stations
+     *
+     * @param companyId        given company id
+     * @param include_children should include children company or not
+     * @return {@link CompanyDetailDto}
+     */
     public CompanyDetailDto getCompanyDetails(String companyId, boolean include_children) {
-        return null;
+
+        if (include_children) {
+            Optional<CompanyTree> companyFlatTree = companyDetialsRepository.getCompanyFlatTree(companyId, 100L);
+            CompanyTree companyTree = companyFlatTree.orElseThrow(() -> new SMException(SMExceptionType.NOT_FOUND));
+
+            List<String> companyIds = new ArrayList<>();
+            companyIds.add(companyTree.getId());
+            companyIds.addAll(companyTree.getChildCompanies().stream().map(Company::getId).collect(Collectors.toList()));
+            List<Station> stationList = stationRepository.findAllByCompanyIdIn(companyIds);
+
+            return DtoMapper.toCompanyDetailDto(companyTree, stationList);
+
+        } else {
+            Company company = companyRepository.findOne(Example.of(Company.builder().id(companyId).build()))
+                    .orElseThrow(() -> new SMException(SMExceptionType.NOT_FOUND));
+            List<Station> stations = stationRepository.findAll(Example.of(Station.builder().companyId(companyId).build()));
+            return CompanyDetailDto.builder()
+                    .company(DtoMapper.getCompanyDto(company))
+                    .stations(stations.stream().map(DtoMapper::getStationDto).collect(Collectors.toList()))
+                    .childCompanies(Collections.emptyList())
+                    .build();
+        }
     }
 }

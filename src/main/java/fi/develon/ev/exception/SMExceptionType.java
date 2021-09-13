@@ -11,7 +11,8 @@ import org.springframework.http.HttpStatus;
 public enum SMExceptionType {
     GENERAL(1000, HttpStatus.INTERNAL_SERVER_ERROR, "fi.develon.ev.error.general"),
     VALIDATION(1001, HttpStatus.BAD_REQUEST, "fi.develon.ev.error.validation"),
-    NOT_FOUND(1002, HttpStatus.NOT_FOUND, "fi.develon.ev.error.not_found");
+    NOT_FOUND(1002, HttpStatus.NOT_FOUND, "fi.develon.ev.error.not_found"),
+    BAD_REQUEST(1003, HttpStatus.BAD_REQUEST, "fi.develon.ev.error.bad_request");
 
     private final int code;
     private final HttpStatus httpStatus;

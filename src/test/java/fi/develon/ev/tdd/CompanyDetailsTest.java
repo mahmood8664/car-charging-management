@@ -27,7 +27,7 @@ import java.util.Optional;
 public class CompanyDetailsTest extends MongoDBIT {
 
     @Test
-    void getAllCompaniesTest_OK() throws Exception {
+    void getCompanyDetailTest_OK() throws Exception {
         addThreeCompanies();
         addStations();
 
@@ -63,178 +63,65 @@ public class CompanyDetailsTest extends MongoDBIT {
         CompanyDetailDto companyDetailDto2 = childCompanies.get(0);
         Assertions.assertThat(companyDetailDto2.getCompany().getCompanyId()).isEqualTo("3333");
         Assertions.assertThat(companyDetailDto2.getStations().size()).isEqualTo(0);
-        Assertions.assertThat( companyDetailDto2.getChildCompanies()).isNull();
+        Assertions.assertThat( companyDetailDto2.getChildCompanies().size()).isEqualTo(0);
     }
 
     @Test
-    void getCompanyTest_OK() throws Exception {
-        addTwoCompanies();
-
-        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/companies/2222"))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-
-        BaseResponse<CompanyDto> getCompanyResponse = json.readValue(
-                resultActions.andReturn().getResponse().getContentAsString(), new TypeReference<>() {
-                });
-
-        Assertions.assertThat(getCompanyResponse.isSuccessful()).isTrue();
-        Assertions.assertThat(getCompanyResponse.getResponse()).isNotNull();
-        Assertions.assertThat(getCompanyResponse.getResponse().getParentCompanyId()).isEqualTo("1111");
-        Assertions.assertThat(getCompanyResponse.getResponse().getCompanyName()).isEqualTo("222");
-        Assertions.assertThat(getCompanyResponse.getResponse().getParentCompanyId()).isEqualTo("1111");
-
-    }
-
-    @Test
-    void getCompanyTest_NotFound() throws Exception {
-        addTwoCompanies();
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/companies/3333"))
-                .andExpect(MockMvcResultMatchers.status().isNotFound());
-
-    }
-
-    @Test
-    void createCompanyTest_OK() throws Exception {
-        addTwoCompanies();
-
-        CreateCompanyRequest request = CreateCompanyRequest.builder()
-                .companyName("3333")
-                .parentCompanyId("2222")
-                .build();
-
-        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/companies")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json.writeValueAsString(request))
-        ).andExpect(MockMvcResultMatchers.status().isOk());
-
-        BaseResponse<String> createResponse = json.readValue(
-                resultActions.andReturn().getResponse().getContentAsString(), new TypeReference<>() {
-                });
-
-        Assertions.assertThat(createResponse.isSuccessful()).isTrue();
-        Assertions.assertThat(createResponse.getResponse()).isNotEmpty();
-
-        Optional<Company> cmp = companyRepository.findOne(Example.of(Company.builder().id(createResponse.getResponse()).build()));
-        cmp.ifPresentOrElse(company -> {
-            Assertions.assertThat(company.getParentCompanyId()).isEqualTo(request.getParentCompanyId());
-            Assertions.assertThat(company.getName()).isEqualTo(request.getCompanyName());
-        }, () -> Assertions.fail("company is not created!"));
-
-    }
-
-    @Test
-    void createCompanyTest_NotFound() throws Exception {
-        addTwoCompanies();
-
-        CreateCompanyRequest request = CreateCompanyRequest.builder()
-                .companyName("3333")
-                .parentCompanyId("sdfds")
-                .build();
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/companies")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json.writeValueAsString(request))
-        ).andExpect(MockMvcResultMatchers.status().isNotFound());
-
-    }
-
-
-    @Test
-    void updateCompanyTest_OK() throws Exception {
-        addThreeCompanies();
-
-        CompanyDto request = CompanyDto.builder()
-                .companyId("3333")
-                .companyName("new")
-                .parentCompanyId("1111")
-                .build();
-
-        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/companies")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json.writeValueAsString(request))
-        ).andExpect(MockMvcResultMatchers.status().isOk());
-
-        BaseResponse<Void> updateResponse = json.readValue(
-                resultActions.andReturn().getResponse().getContentAsString(), new TypeReference<>() {
-                });
-
-        Assertions.assertThat(updateResponse.isSuccessful()).isTrue();
-
-        Optional<Company> cmp = companyRepository.findOne(Example.of(Company.builder().id("3333").build()));
-        cmp.ifPresentOrElse(company -> {
-            Assertions.assertThat(company.getParentCompanyId()).isEqualTo(request.getParentCompanyId());
-            Assertions.assertThat(company.getName()).isEqualTo(request.getCompanyName());
-        }, () -> Assertions.fail("company update is failed!"));
-
-    }
-
-    @Test
-    void updateCompanyTest_NotFound() throws Exception {
-        addThreeCompanies();
-
-        CompanyDto request = CompanyDto.builder()
-                .companyId("3333")
-                .companyName("new")
-                .parentCompanyId("1111111")
-                .build();
-
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/companies")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json.writeValueAsString(request))
-        ).andExpect(MockMvcResultMatchers.status().isNotFound());
-
-    }
-
-
-    @Test
-    void deleteCompanyTest_OK() throws Exception {
+    void getCompanyDetailNotIncludeChildrenTest_OK() throws Exception {
         addThreeCompanies();
         addStations();
 
-        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/companies/2222")
-        ).andExpect(MockMvcResultMatchers.status().isOk());
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/companies/1111/details?include_children=false"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
 
-        BaseResponse<Void> updateResponse = json.readValue(
+        BaseResponse<CompanyDetailDto> companyDetailDto = json.readValue(
                 resultActions.andReturn().getResponse().getContentAsString(), new TypeReference<>() {
                 });
 
-        Assertions.assertThat(updateResponse.isSuccessful()).isTrue();
+        Assertions.assertThat(companyDetailDto.isSuccessful()).isTrue();
 
-        Optional<Company> cmp = companyRepository.findOne(Example.of(Company.builder().id("2222").build()));
-        cmp.ifPresent(company -> Assertions.fail("deletion is not successful"));
+        Assertions.assertThat(companyDetailDto.getResponse().getCompany().getCompanyId()).isEqualTo("1111");
+        Assertions.assertThat(companyDetailDto.getResponse().getCompany().getCompanyName()).isEqualTo("111");
+        Assertions.assertThat(companyDetailDto.getResponse().getCompany().getParentCompanyId()).isEqualTo(null);
 
-        //Check that child companies of deleted company is belong to parent company of deleted company (if exist)
-        Optional<Company> cmp2 = companyRepository.findOne(Example.of(Company.builder().id("3333").build()));
-        cmp2.ifPresentOrElse(company -> Assertions.assertThat(company.getParentCompanyId()).isEqualTo("1111"),
-                () -> Assertions.fail("cannot find company with id 1111"));
+        Assertions.assertThat(companyDetailDto.getResponse().getStations().size()).isEqualTo(2);
+        Assertions.assertThat(companyDetailDto.getResponse().getStations().get(0).getStationId()).isEqualTo("11111");
+        Assertions.assertThat(companyDetailDto.getResponse().getStations().get(1).getStationId()).isEqualTo("22222");
 
-        stationRepository.findAll(Example.of(Station.builder().companyId("2222").build())).stream().findAny().ifPresent(station ->
-                Assertions.fail("Station of company must be deleted after deletion of company"));
+        Assertions.assertThat(companyDetailDto.getResponse().getChildCompanies().size()).isEqualTo(0);
+
     }
+
 
     @Test
-    void deleteCompanyTest_NotFound() throws Exception {
+    void getCompanyDetailSubTree_OK() throws Exception {
         addThreeCompanies();
+        addStations();
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/companies/3434")
-        ).andExpect(MockMvcResultMatchers.status().isNotFound());
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/companies/2222/details?include_children=true"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
 
+        BaseResponse<CompanyDetailDto> companyDetailDto = json.readValue(
+                resultActions.andReturn().getResponse().getContentAsString(), new TypeReference<>() {
+                });
+
+        Assertions.assertThat(companyDetailDto.isSuccessful()).isTrue();
+
+        //2222
+        CompanyDetailDto companyDetailDto1 = companyDetailDto.getResponse();
+        Assertions.assertThat(companyDetailDto1.getCompany().getCompanyId()).isEqualTo("2222");
+        Assertions.assertThat(companyDetailDto1.getStations().size()).isEqualTo(2);
+        Assertions.assertThat(companyDetailDto1.getStations().get(0).getStationId()).isEqualTo("33333");
+        Assertions.assertThat(companyDetailDto1.getStations().get(1).getStationId()).isEqualTo("44444");
+
+        //3333
+        List<CompanyDetailDto> childCompanies = companyDetailDto1.getChildCompanies();
+        Assertions.assertThat(childCompanies.size()).isEqualTo(1);
+        CompanyDetailDto companyDetailDto2 = childCompanies.get(0);
+        Assertions.assertThat(companyDetailDto2.getCompany().getCompanyId()).isEqualTo("3333");
+        Assertions.assertThat(companyDetailDto2.getStations().size()).isEqualTo(0);
+        Assertions.assertThat( companyDetailDto2.getChildCompanies().size()).isEqualTo(0);
     }
-
-    private void addTwoCompanies() {
-        companyRepository.saveAll(List.of(
-                Company.builder()
-                        .id("1111")
-                        .name("111")
-                        .build(),
-                Company.builder()
-                        .id("2222")
-                        .name("222")
-                        .parentCompanyId("1111")
-                        .build()));
-    }
-
 
     private void addThreeCompanies() {
         companyRepository.saveAll(List.of(

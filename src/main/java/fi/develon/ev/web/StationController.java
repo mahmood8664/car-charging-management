@@ -10,6 +10,7 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * Station controller including all APIs related to station resource
@@ -31,8 +32,20 @@ public class StationController {
             @ApiResponse(code = 500, message = "Internal server error.")
     })
     @GetMapping("")
-    public BaseResponse<PagingResponse<StationDto>> allStations(FindStationsPaginationRequest request) {
+    public BaseResponse<PagingResponse<StationDto>> allStations(PaginationRequest request) {
         return BaseResponse.of(stationService.findStations(request));
+    }
+
+    @ApiOperation(value = "Returns all stations of given company including children companies' stations")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully perform the operation"),
+            @ApiResponse(code = 400, message = "The Request property was not provide correctly."),
+            @ApiResponse(code = 404, message = "Company not found"),
+            @ApiResponse(code = 500, message = "Internal server error.")
+    })
+    @GetMapping("/company/{company_id}")
+    public BaseResponse<List<StationDto>> allStationsOfCompany(@PathVariable("company_id") @Valid @Length(max = 100) String companyId) {
+        return BaseResponse.of(stationService.findStationsOfCompany(companyId));
     }
 
     @ApiOperation(value = "Returns nearby station by given coordinates and distance(KM), ordered by distance")

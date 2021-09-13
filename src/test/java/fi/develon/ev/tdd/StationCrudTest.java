@@ -66,52 +66,37 @@ public class StationCrudTest extends MongoDBIT {
         });
     }
 
+
     @Test
     void getAllStationsOfCompanyTest_OK() throws Exception {
         addCompaniesAndStations();
 
-        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/stations?pageNumber=0&size=4&companyId=1111"))
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/stations/company/1111"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
-        BaseResponse<PagingResponse<StationDto>> allStationsResponse = json.readValue(
+        BaseResponse<List<StationDto>> allStationsResponse = json.readValue(
                 resultActions.andReturn().getResponse().getContentAsString(), new TypeReference<>() {
                 });
 
         Assertions.assertThat(allStationsResponse.isSuccessful()).isTrue();
-        Assertions.assertThat(allStationsResponse.getResponse().getResponseList()).isNotNull();
-        Assertions.assertThat(allStationsResponse.getResponse().getResponseList().size()).isEqualTo(2);
-        Assertions.assertThat(allStationsResponse.getResponse().isHasNext()).isFalse();
-
-        allStationsResponse.getResponse().getResponseList().forEach(stationDto -> {
-            if (stationDto.getStationName().equals("S11")) {
-                Assertions.assertThat(stationDto.getLatitude().compareTo(BigDecimal.valueOf(11))).isEqualTo(0);
-                Assertions.assertThat(stationDto.getLatitude().compareTo(BigDecimal.valueOf(11))).isEqualTo(0);
-            }
-
-            if (stationDto.getStationName().equals("S12")) {
-                Assertions.assertThat(stationDto.getLatitude().compareTo(BigDecimal.valueOf(12))).isEqualTo(0);
-                Assertions.assertThat(stationDto.getLatitude().compareTo(BigDecimal.valueOf(12))).isEqualTo(0);
-            }
-        });
+        Assertions.assertThat(allStationsResponse.getResponse().size()).isEqualTo(4);
     }
 
     @Test
-    void getAllStationsOfCompanyTest_NotResult() throws Exception {
+    void getAllStationsOfCompanyTest2_OK() throws Exception {
         addCompaniesAndStations();
 
-        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/stations?pageNumber=0&size=4&companyId=12334"))
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/stations/company/2222"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
-        BaseResponse<PagingResponse<StationDto>> allStationsResponse = json.readValue(
+        BaseResponse<List<StationDto>> allStationsResponse = json.readValue(
                 resultActions.andReturn().getResponse().getContentAsString(), new TypeReference<>() {
                 });
 
-
         Assertions.assertThat(allStationsResponse.isSuccessful()).isTrue();
-        Assertions.assertThat(allStationsResponse.getResponse().getResponseList()).isNotNull();
-        Assertions.assertThat(allStationsResponse.getResponse().getResponseList().size()).isEqualTo(0);
-        Assertions.assertThat(allStationsResponse.getResponse().isHasNext()).isFalse();
+        Assertions.assertThat(allStationsResponse.getResponse().size()).isEqualTo(2);
     }
+
 
     @Test
     void getStationTest_OK() throws Exception {
@@ -320,6 +305,7 @@ public class StationCrudTest extends MongoDBIT {
                 Company.builder()
                         .id("2222")
                         .name("222")
+                        .parentCompanyId("1111")
                         .build());
 
         stationRepository.saveAll(List.of(Station.builder()

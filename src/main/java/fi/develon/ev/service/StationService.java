@@ -1,10 +1,12 @@
 package fi.develon.ev.service;
 
 import fi.develon.ev.entity.Company;
+import fi.develon.ev.entity.CompanyTree;
 import fi.develon.ev.entity.Station;
 import fi.develon.ev.exception.SMException;
 import fi.develon.ev.exception.SMExceptionType;
 import fi.develon.ev.model.*;
+import fi.develon.ev.repository.CompanyDetialsRepository;
 import fi.develon.ev.repository.CompanyRepository;
 import fi.develon.ev.repository.StationRepository;
 import lombok.AllArgsConstructor;
@@ -17,6 +19,10 @@ import org.springframework.data.geo.Metrics;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -31,6 +37,7 @@ public class StationService {
 
     private final StationRepository stationRepository;
     private final CompanyRepository companyRepository;
+    private final CompanyDetialsRepository companyDetialsRepository;
 
     /**
      * find station by given creteria, this service is paginated.
@@ -38,15 +45,25 @@ public class StationService {
      * @param request {@link PaginationRequest}
      * @return {@link PagingResponse<StationDto>}
      */
-    public PagingResponse<StationDto> findStations(FindStationsPaginationRequest request) {
+    public PagingResponse<StationDto> findStations(PaginationRequest request) {
 
         Page<Station> stations = stationRepository.findAll(Example.of(Station.builder()
-                        .companyId(request.getCompanyId())
-                        .build()),
-                PageRequest.of(request.getPageNumber(), request.getSize()));
+                .build()), PageRequest.of(request.getPageNumber(), request.getSize()));
 
         return PagingResponse.of(stations.get().map(DtoMapper::getStationDto).collect(Collectors.toList()), stations.hasNext());
+    }
 
+    public List<StationDto> findStationsOfCompany(String companyId) {
+
+        Optional<CompanyTree> companyFlatTree = companyDetialsRepository.getCompanyFlatTree(companyId, 100L);
+        List<Station> stations = companyFlatTree.map(companyTree -> {
+            List<String> companyIds = new ArrayList<>();
+            companyIds.add(companyTree.getId());
+            companyIds.addAll(companyTree.getChildCompanies().stream().map(Company::getId).collect(Collectors.toList()));
+            return stationRepository.findAllByCompanyIdIn(companyIds);
+        }).orElseThrow(() -> new SMException(SMExceptionType.NOT_FOUND));
+
+        return stations.stream().map(DtoMapper::getStationDto).collect(Collectors.toList());
     }
 
     /**
@@ -60,7 +77,6 @@ public class StationService {
         return DtoMapper.getStationDto(stationRepository.findOne(Example.of(Station.builder()
                 .id(stationId)
                 .build())).orElseThrow(() -> new SMException(SMExceptionType.NOT_FOUND)));
-
     }
 
 
@@ -75,6 +91,7 @@ public class StationService {
                 .orElseThrow(() -> new SMException(SMExceptionType.NOT_FOUND));
 
         return stationRepository.save(Station.builder()
+                .id(UUID.randomUUID().toString())
                 .name(request.getStationName())
                 .location(new GeoJsonPoint(request.getLongitude().doubleValue(), request.getLatitude().doubleValue()))
                 .companyId(request.getCompanyId())
