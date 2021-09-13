@@ -31,7 +31,7 @@ public class StationController {
             @ApiResponse(code = 500, message = "Internal server error.")
     })
     @GetMapping("")
-    public BaseResponse<PagingResponse<StationDto>> allStations(PaginationRequest request) {
+    public BaseResponse<PagingResponse<StationDto>> allStations(FindStationsPaginationRequest request) {
         return BaseResponse.of(stationService.findStations(request));
     }
 

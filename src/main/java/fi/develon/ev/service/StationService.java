@@ -34,7 +34,7 @@ public class StationService {
      * @param request {@link PaginationRequest}
      * @return {@link PagingResponse<StationDto>}
      */
-    public PagingResponse<StationDto> findStations(PaginationRequest request) {
+    public PagingResponse<StationDto> findStations(FindStationsPaginationRequest request) {
 
         Page<Station> stations = stationRepository.findAll(Example.of(Station.builder()
                         .companyId(request.getCompanyId())
