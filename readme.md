@@ -95,11 +95,11 @@ http://localhost:8080/swagger-ui/
 
 ### Near Stations
 
-To find near stations we used [mongodb geospatial queries](https://docs.mongodb.com/manual/geospatial-queries/).
+To find near stations I used [mongodb geospatial queries](https://docs.mongodb.com/manual/geospatial-queries/).
 
 ### Company hierarchy
 
-To find company hierarchy we
+To find company hierarchy I
 used [mongo `$graphLookup` function](https://docs.mongodb.com/manual/reference/operator/aggregation/graphLookup/). To
-test performance of this function, we run a test including adding 100000 companies with hierarchy and then we tried to
+test performance of this function, I run a test including adding 100000 companies with hierarchy and then we tried to
 perform query. The achieved time was 129 ms for 100000 companies hierarchy.
