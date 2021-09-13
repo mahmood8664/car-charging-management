@@ -1,0 +1,208 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > CompanyController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">fi.develon.ev.web</a>
+</div>
+
+<h1>Coverage Summary for Class: CompanyController (fi.develon.ev.web)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CompanyController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/9)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package fi.develon.ev.web;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import fi.develon.ev.model.*;
+<i class="no-highlight">4</i>&nbsp;import fi.develon.ev.service.CompanyService;
+<i class="no-highlight">5</i>&nbsp;import io.swagger.annotations.ApiOperation;
+<i class="no-highlight">6</i>&nbsp;import io.swagger.annotations.ApiResponse;
+<i class="no-highlight">7</i>&nbsp;import io.swagger.annotations.ApiResponses;
+<i class="no-highlight">8</i>&nbsp;import lombok.AllArgsConstructor;
+<i class="no-highlight">9</i>&nbsp;import org.hibernate.validator.constraints.Length;
+<i class="no-highlight">10</i>&nbsp;import org.springframework.web.bind.annotation.*;
+<i class="no-highlight">11</i>&nbsp;
+<i class="no-highlight">12</i>&nbsp;import javax.validation.Valid;
+<i class="no-highlight">13</i>&nbsp;
+<i class="no-highlight">14</i>&nbsp;/**
+<i class="no-highlight">15</i>&nbsp; * Company controller including all APIs related to company resource
+<i class="no-highlight">16</i>&nbsp; *
+<i class="no-highlight">17</i>&nbsp; * @author mahmood
+<i class="no-highlight">18</i>&nbsp; * @since 9/10/21
+<i class="no-highlight">19</i>&nbsp; */
+<i class="no-highlight">20</i>&nbsp;@RestController
+<b class="fc"><i class="no-highlight">21</i>&nbsp;@AllArgsConstructor</b>
+<i class="no-highlight">22</i>&nbsp;@RequestMapping(&quot;/api/v1/companies&quot;)
+<i class="no-highlight">23</i>&nbsp;public class CompanyController {
+<i class="no-highlight">24</i>&nbsp;
+<i class="no-highlight">25</i>&nbsp;    private final CompanyService companyService;
+<i class="no-highlight">26</i>&nbsp;
+<i class="no-highlight">27</i>&nbsp;    @ApiOperation(value = &quot;Returns all companies, this services is paginated&quot;)
+<i class="no-highlight">28</i>&nbsp;    @ApiResponses(value = {
+<i class="no-highlight">29</i>&nbsp;            @ApiResponse(code = 200, message = &quot;Successfully perform the operation&quot;),
+<i class="no-highlight">30</i>&nbsp;            @ApiResponse(code = 400, message = &quot;The Request property was not provide correctly.&quot;),
+<i class="no-highlight">31</i>&nbsp;            @ApiResponse(code = 500, message = &quot;Internal server error.&quot;)
+<i class="no-highlight">32</i>&nbsp;    })
+<i class="no-highlight">33</i>&nbsp;    @GetMapping(&quot;&quot;)
+<i class="no-highlight">34</i>&nbsp;    public BaseResponse&lt;PagingResponse&lt;CompanyDto&gt;&gt; allCompanies(PaginationRequest request) {
+<b class="fc"><i class="no-highlight">35</i>&nbsp;        return BaseResponse.of(companyService.allCompanies(request));</b>
+<i class="no-highlight">36</i>&nbsp;    }
+<i class="no-highlight">37</i>&nbsp;
+<i class="no-highlight">38</i>&nbsp;    @ApiOperation(value = &quot;Returns given company id&#39;s information, not including stations, for retrieve stations &quot; +
+<i class="no-highlight">39</i>&nbsp;            &quot;call api/v**/company/{company_id}/details endpoint&quot;)
+<i class="no-highlight">40</i>&nbsp;    @ApiResponses(value = {
+<i class="no-highlight">41</i>&nbsp;            @ApiResponse(code = 200, message = &quot;Successfully perform the operation&quot;),
+<i class="no-highlight">42</i>&nbsp;            @ApiResponse(code = 400, message = &quot;The Request property was not provide correctly.&quot;),
+<i class="no-highlight">43</i>&nbsp;            @ApiResponse(code = 404, message = &quot;Company not found&quot;),
+<i class="no-highlight">44</i>&nbsp;            @ApiResponse(code = 500, message = &quot;Internal server error.&quot;)
+<i class="no-highlight">45</i>&nbsp;    })
+<i class="no-highlight">46</i>&nbsp;    @GetMapping(&quot;/{company_id}&quot;)
+<i class="no-highlight">47</i>&nbsp;    public BaseResponse&lt;CompanyDto&gt; getCompany(@PathVariable(&quot;company_id&quot;) @Valid @Length(max = 100) String companyId) {
+<b class="fc"><i class="no-highlight">48</i>&nbsp;        return BaseResponse.of(companyService.getCompany(companyId));</b>
+<i class="no-highlight">49</i>&nbsp;    }
+<i class="no-highlight">50</i>&nbsp;
+<i class="no-highlight">51</i>&nbsp;    @ApiOperation(value = &quot;Returns company details including child companies and stations&quot;)
+<i class="no-highlight">52</i>&nbsp;    @ApiResponses(value = {
+<i class="no-highlight">53</i>&nbsp;            @ApiResponse(code = 200, message = &quot;Successfully perform the operation&quot;),
+<i class="no-highlight">54</i>&nbsp;            @ApiResponse(code = 400, message = &quot;The Request property was not provide correctly.&quot;),
+<i class="no-highlight">55</i>&nbsp;            @ApiResponse(code = 404, message = &quot;Company not found&quot;),
+<i class="no-highlight">56</i>&nbsp;            @ApiResponse(code = 500, message = &quot;Internal server error.&quot;)
+<i class="no-highlight">57</i>&nbsp;    })
+<i class="no-highlight">58</i>&nbsp;    @GetMapping(&quot;/{company_id}/details&quot;)
+<i class="no-highlight">59</i>&nbsp;    public BaseResponse&lt;CompanyDetailDto&gt; getCompanyDetails(@PathVariable(&quot;company_id&quot;) @Valid @Length(max = 100) String companyId,
+<i class="no-highlight">60</i>&nbsp;                                                            @RequestParam(name = &quot;include_children&quot;, defaultValue = &quot;true&quot;) boolean includeChildren) {
+<b class="fc"><i class="no-highlight">61</i>&nbsp;        return BaseResponse.of(companyService.getCompanyDetails(companyId, includeChildren));</b>
+<i class="no-highlight">62</i>&nbsp;    }
+<i class="no-highlight">63</i>&nbsp;
+<i class="no-highlight">64</i>&nbsp;    @ApiOperation(value = &quot;Create new company&quot;)
+<i class="no-highlight">65</i>&nbsp;    @ApiResponses(value = {
+<i class="no-highlight">66</i>&nbsp;            @ApiResponse(code = 200, message = &quot;Successfully perform the operation&quot;),
+<i class="no-highlight">67</i>&nbsp;            @ApiResponse(code = 400, message = &quot;The Request property was not provide correctly.&quot;),
+<i class="no-highlight">68</i>&nbsp;            @ApiResponse(code = 404, message = &quot;Parent company not found&quot;),
+<i class="no-highlight">69</i>&nbsp;            @ApiResponse(code = 500, message = &quot;Internal server error.&quot;)
+<i class="no-highlight">70</i>&nbsp;    })
+<i class="no-highlight">71</i>&nbsp;    @PostMapping(&quot;&quot;)
+<i class="no-highlight">72</i>&nbsp;    public BaseResponse&lt;String&gt; createCompany(@RequestBody @Valid CreateCompanyRequest request) {
+<b class="fc"><i class="no-highlight">73</i>&nbsp;        return BaseResponse.of(companyService.createCompany(request));</b>
+<i class="no-highlight">74</i>&nbsp;    }
+<i class="no-highlight">75</i>&nbsp;
+<i class="no-highlight">76</i>&nbsp;    @ApiOperation(value = &quot;Update company info, not it&#39;s stations, to add/edit/delete stations use stations API&quot;)
+<i class="no-highlight">77</i>&nbsp;    @ApiResponses(value = {
+<i class="no-highlight">78</i>&nbsp;            @ApiResponse(code = 200, message = &quot;Successfully perform the operation&quot;),
+<i class="no-highlight">79</i>&nbsp;            @ApiResponse(code = 400, message = &quot;The Request property was not provide correctly.&quot;),
+<i class="no-highlight">80</i>&nbsp;            @ApiResponse(code = 404, message = &quot;Company not found&quot;),
+<i class="no-highlight">81</i>&nbsp;            @ApiResponse(code = 500, message = &quot;Internal server error.&quot;)
+<i class="no-highlight">82</i>&nbsp;    })
+<i class="no-highlight">83</i>&nbsp;    @PutMapping(&quot;&quot;)
+<i class="no-highlight">84</i>&nbsp;    public BaseResponse&lt;Void&gt; updateCompany(@RequestBody @Valid CompanyDto request) {
+<b class="fc"><i class="no-highlight">85</i>&nbsp;        companyService.updateCompany(request);</b>
+<b class="fc"><i class="no-highlight">86</i>&nbsp;        return BaseResponse.ok();</b>
+<i class="no-highlight">87</i>&nbsp;    }
+<i class="no-highlight">88</i>&nbsp;
+<i class="no-highlight">89</i>&nbsp;    @ApiOperation(value = &quot;Delete company and it&#39;s direct stations, set the children parent company to null&quot;)
+<i class="no-highlight">90</i>&nbsp;    @ApiResponses(value = {
+<i class="no-highlight">91</i>&nbsp;            @ApiResponse(code = 200, message = &quot;Successfully perform the operation&quot;),
+<i class="no-highlight">92</i>&nbsp;            @ApiResponse(code = 400, message = &quot;The Request property was not provide correctly.&quot;),
+<i class="no-highlight">93</i>&nbsp;            @ApiResponse(code = 404, message = &quot;Company not found&quot;),
+<i class="no-highlight">94</i>&nbsp;            @ApiResponse(code = 500, message = &quot;Internal server error.&quot;)
+<i class="no-highlight">95</i>&nbsp;    })
+<i class="no-highlight">96</i>&nbsp;    @DeleteMapping(&quot;/{company_id}&quot;)
+<i class="no-highlight">97</i>&nbsp;    public BaseResponse&lt;Void&gt; deleteCompany(@PathVariable(&quot;company_id&quot;) @Valid @Length(max = 100) String companyId) {
+<b class="fc"><i class="no-highlight">98</i>&nbsp;        companyService.deleteCompany(companyId);</b>
+<b class="fc"><i class="no-highlight">99</i>&nbsp;        return BaseResponse.ok();</b>
+<i class="no-highlight">100</i>&nbsp;    }
+<i class="no-highlight">101</i>&nbsp;
+<i class="no-highlight">102</i>&nbsp;
+<i class="no-highlight">103</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-09-14 02:05</div>
+</div>
+</body>
+</html>
