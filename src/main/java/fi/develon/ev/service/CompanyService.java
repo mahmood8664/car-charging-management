@@ -123,4 +123,7 @@ public class CompanyService {
 
     }
 
+    public CompanyDetailDto getCompanyDetails(String companyId, boolean include_children) {
+        return null;
+    }
 }
