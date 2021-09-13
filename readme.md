@@ -43,6 +43,10 @@ Notes:
 #### Java Version 11
 
 #### Maven 3+
+#### Mongodb version 4.4
+
+You need mongodb to run this application. The information for connecting to database should
+be provided in `application.yml` config file.
 
 ## How to run
 
@@ -71,10 +75,6 @@ java -jar station-management-1.0-SNAPSHOT.jar
 ### Calling APIs
 The application default port is 8080, and after running successfully, you can find the swagger address at
 http://localhost:8080/swagger-ui/
-
-### Database
-You need mongodb to run this application. The information for connecting to database should 
-be provided in `application.yml` config file. 
 
 ### Test Coverage
 ![coverage report](./img/coverage.png)
