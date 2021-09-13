@@ -1,12 +1,12 @@
 package fi.develon.ev.model;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Value;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 
 /**
  * @author mahmood
@@ -18,7 +18,7 @@ import javax.validation.constraints.Positive;
 public class CompanyStationsInquiryRequest extends PaginationRequest {
 
     @ApiModelProperty(value = "Company id", example = "433sdfc")
-    @Length(min = 1,max = 100)
+    @Length(min = 1, max = 100)
     @NotNull
     String companyId;
 }

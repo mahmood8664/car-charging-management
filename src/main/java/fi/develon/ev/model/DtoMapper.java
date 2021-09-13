@@ -11,7 +11,7 @@ import java.util.*;
  * @author mahmood
  * @since 9/13/21
  */
-public class DtoMapper {
+public final class DtoMapper {
 
     private DtoMapper() {
     }

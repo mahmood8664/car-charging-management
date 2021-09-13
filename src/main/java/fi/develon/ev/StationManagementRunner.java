@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * Station management system runner
+ *
  * @author mahmood
  * @since 9/9/21
  */

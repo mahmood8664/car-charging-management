@@ -8,11 +8,11 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 
 /**
  * Create new station request
+ *
  * @author mahmood
  * @since 9/10/21
  */

@@ -5,20 +5,15 @@ import fi.develon.ev.entity.Company;
 import fi.develon.ev.entity.Station;
 import fi.develon.ev.model.BaseResponse;
 import fi.develon.ev.model.CompanyDetailDto;
-import fi.develon.ev.model.CompanyDto;
-import fi.develon.ev.model.CreateCompanyRequest;
 import fi.develon.ev.testcontainer.MongoDBIT;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.domain.Example;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author mahmood
@@ -63,7 +58,7 @@ public class CompanyDetailsTest extends MongoDBIT {
         CompanyDetailDto companyDetailDto2 = childCompanies.get(0);
         Assertions.assertThat(companyDetailDto2.getCompany().getCompanyId()).isEqualTo("3333");
         Assertions.assertThat(companyDetailDto2.getStations().size()).isEqualTo(0);
-        Assertions.assertThat( companyDetailDto2.getChildCompanies().size()).isEqualTo(0);
+        Assertions.assertThat(companyDetailDto2.getChildCompanies().size()).isEqualTo(0);
     }
 
     @Test
@@ -120,7 +115,7 @@ public class CompanyDetailsTest extends MongoDBIT {
         CompanyDetailDto companyDetailDto2 = childCompanies.get(0);
         Assertions.assertThat(companyDetailDto2.getCompany().getCompanyId()).isEqualTo("3333");
         Assertions.assertThat(companyDetailDto2.getStations().size()).isEqualTo(0);
-        Assertions.assertThat( companyDetailDto2.getChildCompanies().size()).isEqualTo(0);
+        Assertions.assertThat(companyDetailDto2.getChildCompanies().size()).isEqualTo(0);
     }
 
     private void addThreeCompanies() {

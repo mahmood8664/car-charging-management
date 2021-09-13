@@ -241,7 +241,7 @@ public class CompanyCrudServicesTest extends MongoDBIT {
                         .build()));
     }
 
-    private void addStations(){
+    private void addStations() {
         stationRepository.saveAll(List.of(Station.builder()
                         .id("11111")
                         .companyId("1111")

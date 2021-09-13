@@ -39,7 +39,7 @@ public class MongoDBIT {
     protected ObjectMapper json;
 
     @BeforeEach
-    void beforeEach(){
+    void beforeEach() {
         clearData();
     }
 
@@ -49,7 +49,7 @@ public class MongoDBIT {
     }
 
     @Container
-    public static MongoDBContainer mongoDBContainer=new MongoDBContainer("mongo");
+    public static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo");
 
     @DynamicPropertySource
     static void mongoDbProperties(DynamicPropertyRegistry registry) {
