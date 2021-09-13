@@ -52,11 +52,11 @@ public class StationControllerTest extends MongoDBIT {
         Assertions.assertThat(allCompanyResponse.getResponse().isHasNext()).isFalse();
 
         if (allCompanyResponse.getResponse().getResponseList().get(0).getCompanyId().equals("1111")) {
-            Assertions.assertThat(allCompanyResponse.getResponse().getResponseList().get(0).getCompanyName()).isEqualTo("1");
+            Assertions.assertThat(allCompanyResponse.getResponse().getResponseList().get(0).getCompanyName()).isEqualTo("111");
         }
 
         if (allCompanyResponse.getResponse().getResponseList().get(0).getCompanyId().equals("2222")) {
-            Assertions.assertThat(allCompanyResponse.getResponse().getResponseList().get(0).getCompanyName()).isEqualTo("2");
+            Assertions.assertThat(allCompanyResponse.getResponse().getResponseList().get(0).getCompanyName()).isEqualTo("222");
         }
 
     }
@@ -84,7 +84,7 @@ public class StationControllerTest extends MongoDBIT {
         Assertions.assertThat(getCompanyResponse.isSuccessful()).isTrue();
         Assertions.assertThat(getCompanyResponse.getResponse()).isNotNull();
         Assertions.assertThat(getCompanyResponse.getResponse().getParentCompanyId()).isEqualTo("1111");
-        Assertions.assertThat(getCompanyResponse.getResponse().getCompanyName()).isEqualTo("2");
+        Assertions.assertThat(getCompanyResponse.getResponse().getCompanyName()).isEqualTo("222");
         Assertions.assertThat(getCompanyResponse.getResponse().getParentCompanyId()).isEqualTo("1111");
 
     }

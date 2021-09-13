@@ -1,10 +1,7 @@
 package fi.develon.ev.web;
 
-import fi.develon.ev.entity.Company;
 import fi.develon.ev.model.*;
-import fi.develon.ev.repository.CompanyAggregate;
-import fi.develon.ev.repository.CompanyRepository;
-import fi.develon.ev.repository.StationRepository;
+import fi.develon.ev.service.CompanyService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -12,7 +9,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 /**
  * Company controller including all APIs related to company resource
@@ -25,9 +21,7 @@ import java.util.Optional;
 @RequestMapping("/api/v1/company")
 public class CompanyController {
 
-    private final CompanyRepository companyRepository;
-    private final StationRepository stationRepository;
-    private final CompanyAggregate companyAggregate;
+    private final CompanyService companyService;
 
     @ApiOperation(value = "Returns all companies, this services is paginated")
     @ApiResponses(value = {
@@ -37,8 +31,7 @@ public class CompanyController {
     })
     @GetMapping("")
     public BaseResponse<PagingResponse<CompanyDto>> allCompanies(PaginationRequest request) {
-
-        return null;
+        return BaseResponse.of(companyService.allCompanies(request));
     }
 
     @ApiOperation(value = "Returns given company id's information, not including stations, for retrieve stations " +
@@ -50,8 +43,8 @@ public class CompanyController {
             @ApiResponse(code = 500, message = "Internal server error.")
     })
     @GetMapping("/{company_id}")
-    public BaseResponse<CompanyDto> getCompany(@PathVariable("company_id") Long companyId) {
-        return null;
+    public BaseResponse<CompanyDto> getCompany(@PathVariable("company_id") String companyId) {
+        return BaseResponse.of(companyService.getCompany(companyId));
     }
 
     @ApiOperation(value = "Returns company details including child companies and stations")
@@ -71,11 +64,12 @@ public class CompanyController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully perform the operation"),
             @ApiResponse(code = 400, message = "The Request property was not provide correctly."),
+            @ApiResponse(code = 404, message = "Parent company not found"),
             @ApiResponse(code = 500, message = "Internal server error.")
     })
     @PostMapping("")
-    public BaseResponse<Long> createCompany(@RequestBody @Valid CreateCompanyRequest request) {
-        return null;
+    public BaseResponse<String> createCompany(@RequestBody @Valid CreateCompanyRequest request) {
+        return BaseResponse.of(companyService.createCompany(request));
     }
 
     @ApiOperation(value = "Update company info, not it's stations, to add/edit/delete stations use stations API")
@@ -87,7 +81,8 @@ public class CompanyController {
     })
     @PutMapping("")
     public BaseResponse<Void> updateCompany(@RequestBody @Valid CompanyDto request) {
-        return null;
+        companyService.updateCompany(request);
+        return BaseResponse.ok();
     }
 
     @ApiOperation(value = "Delete company and it's direct stations, set the children parent company to null")
@@ -98,8 +93,9 @@ public class CompanyController {
             @ApiResponse(code = 500, message = "Internal server error.")
     })
     @DeleteMapping("/{company_id}")
-    public BaseResponse<Void> deleteCompany(@PathVariable("company_id") Long companyId) {
-        return null;
+    public BaseResponse<Void> deleteCompany(@PathVariable("company_id") String companyId) {
+        companyService.deleteCompany(companyId);
+        return BaseResponse.ok();
     }
 
 
