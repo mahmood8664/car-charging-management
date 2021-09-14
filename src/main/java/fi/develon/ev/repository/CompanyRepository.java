@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
  * @since 9/10/21
  */
 @Repository
-public interface CompanyRepository extends MongoRepository<Company, Long> {
+public interface CompanyRepository extends MongoRepository<Company, String> {
 }

@@ -17,7 +17,7 @@ import java.util.List;
  * @since 9/10/21
  */
 @Repository
-public interface StationRepository extends MongoRepository<Station, Long> {
+public interface StationRepository extends MongoRepository<Station, String> {
 
     Slice<Station> findByLocationNear(GeoJsonPoint location, Distance d, Pageable pageable);
 
