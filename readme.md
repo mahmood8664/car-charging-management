@@ -1,4 +1,4 @@
-# Vehicle Vharging Station Management System
+# Vehicle Charging Station Management System
 
 This assignment provides a car charging management service.
 
