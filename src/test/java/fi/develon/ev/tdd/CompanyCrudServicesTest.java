@@ -43,13 +43,11 @@ class CompanyCrudServicesTest extends MongoDBIT {
         Assertions.assertThat(allCompanyResponse.getResponse().getResponseList().size()).isEqualTo(2);
         Assertions.assertThat(allCompanyResponse.getResponse().isHasNext()).isFalse();
 
-        if (allCompanyResponse.getResponse().getResponseList().get(0).getCompanyId().equals("1111")) {
-            Assertions.assertThat(allCompanyResponse.getResponse().getResponseList().get(0).getCompanyName()).isEqualTo("111");
-        }
+        Assertions.assertThat(allCompanyResponse.getResponse().getResponseList().get(0).getCompanyId()).isEqualTo("1111");
+        Assertions.assertThat(allCompanyResponse.getResponse().getResponseList().get(0).getCompanyName()).isEqualTo("111");
 
-        if (allCompanyResponse.getResponse().getResponseList().get(0).getCompanyId().equals("2222")) {
-            Assertions.assertThat(allCompanyResponse.getResponse().getResponseList().get(0).getCompanyName()).isEqualTo("222");
-        }
+        Assertions.assertThat(allCompanyResponse.getResponse().getResponseList().get(1).getCompanyId()).isEqualTo("2222");
+        Assertions.assertThat(allCompanyResponse.getResponse().getResponseList().get(1).getCompanyName()).isEqualTo("222");
 
     }
 

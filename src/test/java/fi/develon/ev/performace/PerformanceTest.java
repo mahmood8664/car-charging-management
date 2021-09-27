@@ -52,6 +52,7 @@ public class PerformanceTest extends MongoDBIT {
             if (i == 0) {
                 firstId = test.getId();
             }
+            prevId = test.getId();
         }
         return firstId;
     }

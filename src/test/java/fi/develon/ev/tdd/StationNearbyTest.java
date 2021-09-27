@@ -29,11 +29,11 @@ class StationNearbyTest extends MongoDBIT {
         addCompaniesAndStations();
 
         /*
-         * we have 4 stations with coordinates: (11,11),(12,12),(13,13),(22,22), our point: (10,10), distance = 300 KM
-         * We expect 2 stations: 11111,22222,3333
+         * we have 4 stations with coordinates: (11,11),(12,12),(13,13),(22,22), our point: (10,10), distance = 468 KM
+         * We expect 3 stations: 11111,22222,3333
          */
 
-        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/stations/nearby?latitude=10&longitude=10&distance=1000"))
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/stations/nearby?latitude=10&longitude=10&distance=468"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
         BaseResponse<PagingResponse<StationDto>> nearbyStations = json.readValue(
@@ -51,6 +51,36 @@ class StationNearbyTest extends MongoDBIT {
         Assertions.assertThat(nearbyStations.getResponse().getResponseList().get(0).getStationId()).isEqualTo("11111");
         Assertions.assertThat(nearbyStations.getResponse().getResponseList().get(1).getStationId()).isEqualTo("22222");
         Assertions.assertThat(nearbyStations.getResponse().getResponseList().get(2).getStationId()).isEqualTo("33333");
+
+    }
+
+    @Test
+    void nearbyStations_2_Test() throws Exception {
+
+        addCompaniesAndStations();
+
+        /*
+         * we have 4 stations with coordinates: (11,11),(12,12),(13,13),(22,22), our point: (10,10), distance = 467 KM
+         * We expect 2 stations: 11111,22222
+         */
+
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/stations/nearby?latitude=10&longitude=10&distance=467"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        BaseResponse<PagingResponse<StationDto>> nearbyStations = json.readValue(
+                resultActions.andReturn().getResponse().getContentAsString(), new TypeReference<>() {
+                });
+
+        Assertions.assertThat(nearbyStations.isSuccessful()).isTrue();
+        Assertions.assertThat(nearbyStations.getResponse().getResponseList()).isNotNull();
+        Assertions.assertThat(nearbyStations.getResponse().getResponseList().size()).isEqualTo(2);
+        Assertions.assertThat(nearbyStations.getResponse().isHasNext()).isFalse();
+
+        nearbyStations.getResponse().getResponseList().forEach(stationDto -> Assertions.assertThat(stationDto.getStationId()).isIn("11111", "22222", "33333"));
+
+        //check the order
+        Assertions.assertThat(nearbyStations.getResponse().getResponseList().get(0).getStationId()).isEqualTo("11111");
+        Assertions.assertThat(nearbyStations.getResponse().getResponseList().get(1).getStationId()).isEqualTo("22222");
 
     }
 
