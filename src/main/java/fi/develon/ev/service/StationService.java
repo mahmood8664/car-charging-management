@@ -6,7 +6,7 @@ import fi.develon.ev.entity.Station;
 import fi.develon.ev.exception.SMException;
 import fi.develon.ev.exception.SMExceptionType;
 import fi.develon.ev.model.*;
-import fi.develon.ev.repository.CompanyDetialsRepository;
+import fi.develon.ev.repository.CompanyDetailsRepository;
 import fi.develon.ev.repository.CompanyRepository;
 import fi.develon.ev.repository.StationRepository;
 import lombok.AllArgsConstructor;
@@ -37,7 +37,7 @@ public class StationService {
 
     private final StationRepository stationRepository;
     private final CompanyRepository companyRepository;
-    private final CompanyDetialsRepository companyDetialsRepository;
+    private final CompanyDetailsRepository companyDetailsRepository;
 
     /**
      * find station by given creteria, this service is paginated.
@@ -55,7 +55,7 @@ public class StationService {
 
     public List<StationDto> findStationsOfCompany(String companyId) {
 
-        Optional<CompanyTree> companyFlatTree = companyDetialsRepository.getCompanyFlatTree(companyId, 100L);
+        Optional<CompanyTree> companyFlatTree = companyDetailsRepository.getCompanyFlatTree(companyId, 100L);
         List<Station> stations = companyFlatTree.map(companyTree -> {
             List<String> companyIds = new ArrayList<>();
             companyIds.add(companyTree.getId());

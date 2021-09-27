@@ -17,7 +17,7 @@ import java.util.Optional;
  */
 @Component
 @AllArgsConstructor
-public class CompanyDetialsRepository {
+public class CompanyDetailsRepository {
 
     private final MongoTemplate mongoTemplate;
 

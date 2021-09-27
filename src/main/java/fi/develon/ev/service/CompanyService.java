@@ -6,7 +6,7 @@ import fi.develon.ev.entity.Station;
 import fi.develon.ev.exception.SMException;
 import fi.develon.ev.exception.SMExceptionType;
 import fi.develon.ev.model.*;
-import fi.develon.ev.repository.CompanyDetialsRepository;
+import fi.develon.ev.repository.CompanyDetailsRepository;
 import fi.develon.ev.repository.CompanyRepository;
 import fi.develon.ev.repository.StationRepository;
 import lombok.AllArgsConstructor;
@@ -33,7 +33,7 @@ public class CompanyService {
 
     private final CompanyRepository companyRepository;
     private final StationRepository stationRepository;
-    private final CompanyDetialsRepository companyDetialsRepository;
+    private final CompanyDetailsRepository companyDetailsRepository;
 
     /**
      * Returns all companies, pagination is mandatory
@@ -141,7 +141,7 @@ public class CompanyService {
     public CompanyDetailDto getCompanyDetails(String companyId, boolean includeChildren) {
 
         if (includeChildren) {
-            Optional<CompanyTree> companyFlatTree = companyDetialsRepository.getCompanyFlatTree(companyId, 100L);
+            Optional<CompanyTree> companyFlatTree = companyDetailsRepository.getCompanyFlatTree(companyId, 100L);
             CompanyTree companyTree = companyFlatTree.orElseThrow(() -> new SMException(SMExceptionType.NOT_FOUND));
 
             List<String> companyIds = new ArrayList<>();
